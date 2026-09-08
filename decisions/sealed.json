@@ -1,0 +1,32 @@
+{
+  "//": "Append-only. `prev` chains each seal to the one before, so removing a record breaks the chain. `body` must never change; only the status line may.",
+  "records": [
+    {
+      "slug": "0001-spec-tests-start-at-business-logic",
+      "status": "Accepted",
+      "file": "71ea8c53c52967be5e85f9f8e57c12c05891e95c713af1f1a8fb9b27512f990b",
+      "body": "9be72124d5fa4dd557b7b5d78e672ece9110c0ee7b80cd41609f60bb1210d644",
+      "sealed_at": "2026-09-08T21:24:56.101Z",
+      "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+      "history": []
+    },
+    {
+      "slug": "0002-a-failure-is-a-value-and-only-domain-kinds-are-narrowed",
+      "status": "Accepted",
+      "file": "6bed9388e11dd9e1d0575225374540988b5baa2b90834753f0afc229b1039a25",
+      "body": "dfaad00597d3fd9863f1fa3749689003f8bd92695c74edcc1d95f4ec6ecf1d75",
+      "sealed_at": "2026-09-08T21:24:56.128Z",
+      "prev": "72f6650bc84d92f84b7b916ef56e7b0372b361cfb83354257415d89b9e1f96de",
+      "history": []
+    },
+    {
+      "slug": "0003-the-client-sends-a-correlation-id-and-provenance-is-a-domain-concern",
+      "status": "Accepted",
+      "file": "ddf5fbddeef2d9a48443cf7fb3700885c0ad5ba799240850cc479ab45e627ef8",
+      "body": "6968dca1efc80a1b7d5f03f02265684996d9689f61aef5580b1b370653ea5f9c",
+      "sealed_at": "2026-09-08T22:22:30.197Z",
+      "prev": "2d963564518318cdbf0c4f1c8833a9d054d1842e34c0c910691cca6a6c588dcc",
+      "history": []
+    }
+  ]
+}

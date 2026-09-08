@@ -1,0 +1,65 @@
+export class AppError extends Error
+export function unwrap<T>(r: Result<T, Failure>): T
+export function asFailure(cause: unknown): Failure
+export type ClassValue = string | number | null | false | undefined;
+export function cn(...values: ClassValue[]): string
+export type FailureMeta =
+export const TRANSPORT_KINDS = [
+export const DOMAIN_KINDS = ["not_found", "invalid", "conflict"] as const;
+export const FAILURE_KINDS = [...TRANSPORT_KINDS, ...DOMAIN_KINDS] as const;
+export type TransportKind = (typeof TRANSPORT_KINDS)[number];
+export type DomainKind = (typeof DOMAIN_KINDS)[number];
+export type FailureKind = TransportKind | DomainKind;
+export type Failure =
+export type Fails<K extends FailureKind> = Extract<Failure, { kind: K }>;
+export type TransportFailure = Fails<TransportKind>;
+export type DomainFailure = Fails<DomainKind>;
+export const unauthenticated = (message: string, m: MetaInit = {}): Fails<"unauthenticated"> => …
+export const forbidden = (message: string, m: MetaInit = {}): Fails<"forbidden"> => …
+export const rateLimited = (message: string, retryAfter?: number, m: MetaInit = {}): Fails<"rate_limited"> => …
+export const unavailable = (message: string, m: MetaInit = {}): Fails<"unavailable"> => …
+export const timeout = (message: string, m: MetaInit = {}): Fails<"timeout"> => …
+export const canceled = (message: string, m: MetaInit = {}): Fails<"canceled"> => …
+export const internal = (message: string, m: MetaInit = {}): Fails<"internal"> => …
+export const notFound = (message: string, m: MetaInit = {}): Fails<"not_found"> => …
+export const invalid = (message: string, fields: Record<string, string>, m: MetaInit = {}): Fails<"invalid"> => …
+export const conflict = (message: string, m: MetaInit = {}): Fails<"conflict"> => …
+export function isFailureKind(v: unknown): v is FailureKind
+export function isTransportKind(v: unknown): v is TransportKind
+export function isDomainKind(v: unknown): v is DomainKind
+export function isFailure(v: unknown): v is Failure
+export const isTransport = (f: Failure): f is TransportFailure => …
+export const because = <F extends Failure>(failure: F, cause: Failure): F => …
+export function chain(failure: Failure): Failure[]
+export const rootCause = (failure: Failure): Failure => …
+export function narrow<K extends DomainKind>(
+export function isRetryable(f: Failure): boolean
+export function retryDelay(f: Failure, attempt: number): number | null
+export function assertNever(value: never, context = "value"): never
+export type { ClassValue } from "./cn";
+export type
+export type { Result } from "./result";
+export type { Presence } from "./optional";
+export async function optional<T, E extends Failure>(
+export const anyNotFound = (_f: Fails<"not_found">): boolean => …
+export const absentWhenType = (type: string) => …
+export type Presence<T, E extends Failure = Failure> =
+export function presenceOf<T, E extends Failure>(r: Result<T | null, E>): Presence<T, E>
+export class Ok<T, E = Failure>
+export class Err<T, E = Failure>
+export type Result<T, E = Failure> = Ok<T, E> | Err<T, E>;
+export const ok = <T, E = Failure>(value: T): Ok<T, E> => …
+export const err = <T = never, E = Failure>(error: E): Err<T, E> => …
+export function all<T extends readonly Result<unknown, unknown>[]>(
+export async function andThenAsync<T, U, E, F = E>(
+export function fromJSON<T, E>(v: { ok: true; value: T } | { ok: false; error: E }): Result<T, E>
+export type FailureDecoder = (response: Response) => …
+export type ClientConfig =
+export type RequestOptions =
+export type HttpClient =
+  request<T>(method: string, path: string, options?: RequestOptions): Promise<Result<T, Failure>>;
+  get<T>(path: string, options?: RequestOptions): Promise<Result<T, Failure>>;
+  post<T>(path: string, options?: RequestOptions): Promise<Result<T, Failure>>;
+  put<T>(path: string, options?: RequestOptions): Promise<Result<T, Failure>>;
+  patch<T>(path: string, options?: RequestOptions): Promise<Result<T, Failure>>;
+  delete<T>(path: string, options?: RequestOptions): Promise<Result<T, Failure>>;

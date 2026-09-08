@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { Source } from "../_lib/source";
 import s from "./sink.module.css";
 
 /** A stable anchor from the visible title, so the nav can be derived from the
@@ -29,8 +30,9 @@ export function Row({ label, children }: { label: string; children: ReactNode })
 
 /** The sink's own demo frame. Named `Case` and not `Panel` because
  *  `display/Panel` is a component this page will have to be able to show. */
-export function Case({ title, note, children }: {
+export function Case({ title, note, children, sources }: {
   title: string; note?: string; children: ReactNode;
+  sources?: ReadonlyArray<Source>;
 }) {
   const id = slug(title);
   return (
@@ -42,6 +44,24 @@ export function Case({ title, note, children }: {
         {note ? <span className={s.panelNote}>{note}</span> : null}
       </div>
       <div className={s.panelBody}>{children}</div>
+      {sources?.length ? (
+        /* Collapsed. The source used to be the tallest thing in every case, so
+           scrolling the page showed code and the demos were what you passed on
+           the way. A <details> needs no component, is keyboard-operable and is
+           announced by default. */
+        <details className={s.source}>
+          <summary className={s.sourceSummary}>
+            source
+            <span className={s.sourcePaths}>{sources.map((x) => x.path).join(" · ")}</span>
+          </summary>
+          {sources.map((src) => (
+            <div key={src.path}>
+              <p className={s.codePath}>{src.path}</p>
+              <pre className={s.code}><code>{src.code}</code></pre>
+            </div>
+          ))}
+        </details>
+      ) : null}
     </div>
   );
 }

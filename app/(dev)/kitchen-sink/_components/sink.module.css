@@ -156,6 +156,54 @@
   .anchor { color: inherit; }
   .anchor:hover { color: var(--accent); }
 
+  /* Collapsed by default — the demo is the point, the source is the appendix. */
+  .source { border-block-start: 1px solid var(--line); }
+
+  .sourceSummary {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    padding: var(--space-4) var(--space-6);
+    font-size: var(--text-11);
+    color: var(--ink-4);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+  }
+
+  .sourceSummary::-webkit-details-marker { display: none; }
+  .sourceSummary::before { content: "\25B8"; display: inline-block; transition: transform var(--dur-1) var(--ease); }
+  .source[open] .sourceSummary::before { transform: rotate(90deg); }
+  .sourceSummary:hover { color: var(--ink-2); }
+
+  .sourcePaths {
+    font-family: var(--font-mono);
+    font-size: var(--text-9);
+    color: var(--ink-4);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .code {
+    margin: 0;
+    padding: var(--space-6);
+    background: var(--surface-panel-2);
+    border-block-start: 1px solid var(--line);
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: var(--text-11);
+    line-height: var(--leading-body);
+    color: var(--ink-2);
+  }
+
+  .codePath {
+    font-family: var(--font-mono);
+    font-size: var(--text-10);
+    color: var(--ink-4);
+    padding: var(--space-4) var(--space-6) 0;
+  }
+
   /* ── audit table ────────────────────────────────────────────────────── */
 
   .audits { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-7); }
