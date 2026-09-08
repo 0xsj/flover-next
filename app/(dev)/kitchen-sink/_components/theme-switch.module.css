@@ -1,0 +1,27 @@
+@layer screen {
+  .group {
+    display: inline-flex;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    background: var(--surface-sunk);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-2);
+  }
+
+  .option {
+    height: var(--control-sm);
+    padding: 0 var(--space-5);
+    border-radius: var(--radius-1);
+    font-size: var(--text-11);
+    font-weight: var(--weight-medium);
+    color: var(--ink-3);
+    transition: color var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+  }
+
+  .option:hover { color: var(--ink); background: var(--surface-hover); }
+
+  .option[aria-pressed="true"] {
+    color: var(--fill-ink);
+    background: var(--fill);
+  }
+}

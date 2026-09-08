@@ -1,150 +1,116 @@
-.page {
-  --background: #fafafa;
-  --foreground: #fff;
-
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
-}
-
-.main {
-  display: flex;
-  flex: 1;
-  width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
-}
-
-.intro {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
-}
-
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
-}
-
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
-}
-
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.ctas {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
-  gap: 16px;
-  font-size: 14px;
-}
-
-.ctas a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
-}
-
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
-  gap: 8px;
-}
-
-a.secondary {
-  border-color: var(--button-secondary-border);
-}
-
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
-}
-
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
-  }
-
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
-
+@layer screen {
+  /* One screen, and it must not scroll. 100dvh rather than 100vh so a mobile
+     browser's collapsing toolbar does not push the last line under the chrome. */
   .page {
-    --background: #000;
-    --foreground: #000;
+    position: relative;
+    block-size: 100dvh;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    padding: var(--space-8);
+    background: var(--surface-ground);
+    isolation: isolate;
 
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
+    /* The bloom's three strengths are local properties rather than tokens: the
+       same alpha does not carry the same weight on a near-black ground and a
+       near-white one, and that is a decision about this screen. */
+    --bloom-core: 48%;
+    --bloom-mid:  22%;
+    --bloom-far:  15%;
   }
-}
 
-.code {
-  font-family: var(--font-geist-mono);
-  font-size: 0.9em;
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  padding: 0.1em 0.4em;
-  border-radius: 6px;
+  :root[data-theme="light"] .page {
+    --bloom-core: 26%;
+    --bloom-mid:  11%;
+    --bloom-far:   8%;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .page {
+      --bloom-core: 26%;
+      --bloom-mid:  11%;
+      --bloom-far:   8%;
+    }
+  }
+
+  /* One bloom, mixed FROM the accent token so a single construction resolves in
+     both themes — in dark the accent is a bright green and reads as a glow; in
+     light it is a deep green and reads as a wash. It is centred below the
+     wordmark and sized so the word sits inside its upper falloff, which is what
+     stops the gradient reading as a separate object at the bottom of the page. */
+  .glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(104% 96% at 50% 112%,
+        color-mix(in srgb, var(--accent) var(--bloom-core), transparent) 0%,
+        color-mix(in srgb, var(--accent) var(--bloom-mid), transparent) 32%,
+        color-mix(in srgb, var(--accent) var(--bloom-far), transparent) 54%,
+        transparent 86%),
+      radial-gradient(70% 40% at 50% -10%,
+        color-mix(in srgb, var(--info) var(--bloom-far), transparent) 0%,
+        transparent 72%);
+  }
+
+  /* inline-size: 100% matters more than it looks. The page clips rather than
+     scrolls, so a body sized to its content overflows a narrow viewport and the
+     tagline is CUT rather than wrapped. Width first, cap second. */
+  .body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+    text-align: center;
+    inline-size: 100%;
+    max-inline-size: 52ch;
+  }
+
+  .wordmark {
+    font-size: clamp(var(--text-30), min(9vw, 13vh), 88px);
+    font-weight: var(--weight-bold);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .tagline {
+    font-size: var(--text-15);
+    line-height: var(--leading-body);
+    color: var(--ink-2);
+    max-inline-size: min(46ch, 100%);
+  }
+
+  .link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+    block-size: var(--control-lg);
+    padding-inline: var(--space-7);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-2);
+    background: var(--surface-panel);
+    color: var(--ink);
+    font-size: var(--text-12-5);
+    transition: background var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
+  }
+
+  .link:hover {
+    border-color: var(--line-heavy);
+    background: var(--surface-panel-2);
+  }
+
+  .arrow { color: var(--ink-4); }
+
+  .foot {
+    position: absolute;
+    inset-block-end: var(--space-9);
+    inset-inline: 0;
+    display: flex;
+    justify-content: center;
+    font-size: var(--text-11);
+    color: var(--ink-4);
+  }
 }
