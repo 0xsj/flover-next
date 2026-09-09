@@ -36,6 +36,15 @@
       "sealed_at": "2026-09-09T09:23:32.796Z",
       "prev": "b073050501b6f2df6ff67d06a5ea1d1b230f475829ddb02cfd2258ea05ecd818",
       "history": []
+    },
+    {
+      "slug": "0005-a-write-is-a-server-action-or-a-mutation-and-the-session-decides",
+      "status": "Accepted",
+      "file": "be60129ea32e53bfb9c0fd2cac60c1796fb71acb872c24922b47065812aecfc6",
+      "body": "917b5b9b983ac7ffc737c480ba36dedc84b4d4bf4a3fee0a8ce2802d297110fc",
+      "sealed_at": "2026-09-09T17:47:41.892Z",
+      "prev": "42582fc66e78a9a82ccf4ea44f777701e43a4c115dd8c84d874b47164abc4969",
+      "history": []
     }
   ]
 }

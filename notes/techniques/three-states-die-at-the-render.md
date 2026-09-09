@@ -29,6 +29,29 @@ Three renderers, each closing one route to the collapse:
 And the two absent states must not LOOK alike, or the component has thrown away
 the distinction it exists to keep.
 
+## They die at a guard as well, and the title undersells it
+
+**Measured, afterwards.** The same collapse happened in a place with no render
+in it — an authentication guard, written as:
+
+    if (!result.ok) redirect("/sign-in")
+
+Branching on *ok* rather than on the KIND folds *we could not find out* into
+*nobody is signed in*. An unreachable server then sends somebody to a sign-in
+form that will fail for the same reason, and takes their place in the
+application away on the way.
+
+A guard has three answers, not two:
+
+    signed in                      carry on
+    the server ANSWERED, and the   redirect. Signing in will work
+      answer is nobody
+    we could not find out          THROW, and let a boundary say so
+
+So the closing move generalises past renderers: the collapse happens wherever a
+rich value meets a binary decision, and the fix is the same — hand the whole
+value to something that has a branch for each state, so there is none to omit.
+
 ## Why a rule is not enough here
 
 The rule — *keep them apart* — is understood by everybody and obeyed everywhere

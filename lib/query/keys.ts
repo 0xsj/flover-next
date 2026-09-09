@@ -11,6 +11,19 @@
  *
  *  The `example` entry goes when the specimen service does. */
 export const keys = {
+  session: {
+    root: () => ["session"] as const,
+    all: () => ["session", "sessions"] as const,
+  },
+  activity: {
+    root: () => ["activity"] as const,
+    /* The FILTER is part of the key. Two filters are two lists and must be two
+       cache entries — sharing a key means switching facet shows the previous
+       facet's rows until the refetch lands, which reads as a slow server rather
+       than as a key that was too coarse. */
+    list: (facet?: string, correlation?: string) =>
+      ["activity", "list", { facet: facet ?? null, correlation: correlation ?? null }] as const,
+  },
   example: {
     root: () => ["example"] as const,
     all: (workspace: string) => ["example", "items", workspace] as const,

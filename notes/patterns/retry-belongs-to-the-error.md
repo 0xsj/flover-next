@@ -50,6 +50,24 @@ And the fourth, which is structural: the cache is above the transport, so a
 policy written there either names a status code — breaking the tier rule — or
 guesses without one.
 
+## Rollback is the same question, and the wrong answer is worse
+
+An optimistic write asks the mirror of it: *should this be undone?* — and the
+answer is again in the kind, not in the fact of failure.
+
+    every kind      put the row back
+    not_found       do NOT. It was already gone, so the removal was RIGHT
+
+A rollback that is wrong is worse than no rollback. It restores a row that no
+longer exists and tells the reader their action failed **after** it had
+succeeded — two false statements from one convenient `onError` that treated
+every failure alike.
+
+The general form: **whether to retry, whether to undo, and whether to offer the
+reader a button are all policies the failure already knows.** A caller that
+branches on *did it fail* rather than on *what kind of failure* is guessing at
+each of them.
+
 ## Gotchas
 
 **One definition, several callers.** The cache is not the only thing that

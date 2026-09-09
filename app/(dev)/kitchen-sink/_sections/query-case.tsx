@@ -73,10 +73,10 @@ export function QueryCase() {
 
 /** The reads belong to the interaction, so they do not exist before it does. */
 function Reads({ roots }: { roots: Roots }) {
-  const list = useQuery(itemsQuery(roots.plain.client, "w1"));
-  const empty = useQuery(defaultItemQuery(roots.plain.client, "w1"));
+  const list = useQuery(itemsQuery(roots.plain.clientFor("example"), "w1"));
+  const empty = useQuery(defaultItemQuery(roots.plain.clientFor("example"), "w1"));
   const broken = useQuery({
-    ...itemsQuery(roots.broken.client, "broken"),
+    ...itemsQuery(roots.broken.clientFor("example"), "broken"),
     queryKey: ["example", "items", "broken"] as const,
     retry: false,
   });

@@ -61,7 +61,7 @@ export default async function ProbePage({
   /* An ordinary service call. It has no idea any of the above happened — and
      this screen never names an endpoint, which is the rule `lib/services`
      exists to hold. */
-  const result = await listItems(root.client, query.get("workspace") ?? "w1");
+  const result = await listItems(root.clientFor("example"), query.get("workspace") ?? "w1");
 
   const presence = presenceOf(result.map((rows) => (rows.length ? rows : null)));
 
@@ -80,7 +80,7 @@ export default async function ProbePage({
         {/* A surface under a plan must SAY so. A forced failure that looks real
             is an afternoon somebody spends chasing it. */}
         <div className={s.badges}>
-          {root.usingFixtures ? <span className={`${s.badge} ${s.fixture}`}>fixtures</span> : null}
+          {root.usingFixtures("example") ? <span className={`${s.badge} ${s.fixture}`}>fixtures</span> : null}
           {root.underChaos ? <span className={`${s.badge} ${s.chaos}`}>chaos</span> : null}
           <span className={`${s.badge} ${s.cid}`}>{root.correlationId}</span>
         </div>

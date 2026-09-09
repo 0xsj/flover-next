@@ -31,11 +31,27 @@
  * flow. `asFailure` on the way back turns the thrown thing into the same value
  * the rest of the system speaks, so one exhaustive switch serves both paths.
  *
+ * # A mutation cancels before it is optimistic
+ *
+ * A refetch already in flight resolves with a list that still holds the row the
+ * mutation is removing, and it lands AFTER the optimistic update — so the row
+ * reappears for a frame and then goes again. `cancelQueries` first is what makes
+ * the optimism hold, and it is a second reason the port has always accepted a
+ * signal.
+ *
+ * The rollback is decided by the failure KIND, not by the fact of failure. A
+ * `not_found` on a delete means the row had already gone: the removal was right,
+ * and putting it back shows a dead row and reports a failure that did not
+ * happen.
+ *
  * # What is deliberately absent
  *
- * **Mutations.** They need a caller to be worth shaping, and the shape depends
- * on what a form does with a failure — see the decision record on the failure
- * model. Add them with the first write screen.
+ * **Nothing, now.** Mutations were deliberately absent here until a write screen
+ * existed to shape them. One does, and `decisions/0005` says which writes belong
+ * here and which belong in a server action: a write that touches the session, or
+ * must work without JavaScript, cannot be a mutation — only a Server Function
+ * can set a cookie. Everything else that changes a resource a cache is already
+ * holding belongs here, because only a mutation can be optimistic.
  *
  * **Prefetching and hydration.** A real concern in this framework and a
  * premature one here; both are additive and neither changes anything above.

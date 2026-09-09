@@ -1,7 +1,9 @@
-import { queryOptions } from "@tanstack/react-query";
+import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { unwrap } from "../kernel";
 import type { HttpClient } from "../http";
 import { findDefaultItem, getItem, listItems } from "../services/example";
+import { getMyActivity } from "../services/ledger";
+import { listSessions } from "../services/session";
 import { keys } from "./keys";
 
 /* THE ONE THROW SITE, and it is three lines each.
@@ -18,6 +20,48 @@ import { keys } from "./keys";
  * Threading it into the service is what makes `canceled` reachable at all: the
  * port has always accepted a signal, and without this nothing above the
  * transport could ever supply one. */
+
+/** The one query with a real caller.
+ *
+ *  Its client is a fetch adapter pointed at this application's own origin, not
+ *  at an API — the session cookie is HttpOnly, so the browser cannot hold a
+ *  bearer and asks its own server instead. The route handler answers in the
+ *  same problem document the adapter decodes, so what arrives here is the same
+ *  `Failure` the server had, and the retry policy below reasons about it
+ *  without knowing which side produced it. */
+export const sessionsQuery = (client: HttpClient) =>
+  queryOptions({
+    queryKey: keys.session.all(),
+    queryFn: async ({ signal }) => unwrap(await listSessions(client, { signal })),
+  });
+
+/** A cursor-paged read, which is the shape this cache is actually for.
+ *
+ *  # `getNextPageParam` reads the ABSENCE of a cursor
+ *
+ *  The server omits `next` when there is no more, so "is there another page" is
+ *  a property of the response rather than a count a caller maintains — and
+ *  `hasNextPage` follows from it. Returning `undefined` is what stops the
+ *  infinite query, and a server that sent `next: null` instead would need the
+ *  coalesce that is here anyway.
+ *
+ *  # Offset pagination would be wrong, not merely worse
+ *
+ *  The ledger grows at the head, so a page-2 offset request made a second later
+ *  re-shows rows that moved down and hides the ones that took their place. The
+ *  cursor is opaque on purpose; a screen that parses it breaks the day the
+ *  server stops using an index. */
+export const activityQuery = (
+  client: HttpClient,
+  filter: { facet?: string; correlation?: string } = {},
+) =>
+  infiniteQueryOptions({
+    queryKey: keys.activity.list(filter.facet, filter.correlation),
+    queryFn: async ({ pageParam, signal }) =>
+      unwrap(await getMyActivity(client, { ...filter, after: pageParam, signal })),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (last) => last.next ?? undefined,
+  });
 
 export const itemsQuery = (client: HttpClient, workspace: string) =>
   queryOptions({

@@ -57,6 +57,26 @@ question it exists to answer becomes unanswerable again.
 So the root holds the id, every client it composes shares it, and a caller may
 pass one in to join an interaction already under way.
 
+## Whoever hands it the context has to run first
+
+The constraint that is easy to miss until it bites. A root built in a LAYOUT is
+built before any page body runs, so anything a page knows — its own query
+string, its own params — arrives too late to configure the client it was meant
+to wrap.
+
+**Measured**, trying to let a fault-injection plan reach the real screens: read
+from a page it did nothing, because the transport it should have wrapped had
+already been built one level up.
+
+So request-scoped context for a root has to come from something that runs before
+the tree does — a proxy or filter that puts it in a header, a cookie, or a
+rewrite. That is a framework-shaped seam and it belongs beside the call site, not
+in this tier. This tier still only takes arguments.
+
+**Corollary:** deduplicate the root per interaction rather than per call. A
+render-scoped cache is what makes *one root, one correlation id* true across a
+tree of components that each ask for one independently.
+
 ## Gotchas
 
 **An empty fixture table is an answer, not a stub.** Where there is no domain

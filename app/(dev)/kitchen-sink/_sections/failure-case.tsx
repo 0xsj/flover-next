@@ -38,7 +38,7 @@ export function FailurePathCase() {
         routes,
         chaos: parsePlan("chaos=GET /items/i1=fail:conflict"),
       });
-      const r = await getItem(root.client, "i1");
+      const r = await getItem(root.clientFor("example"), "i1");
       if (!r.ok) setSeen(r.error);
     })();
   }, []);

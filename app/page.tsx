@@ -15,10 +15,13 @@ export default function Home() {
           need, and start with the plumbing already solved.
         </p>
 
-        <Link href="/kitchen-sink" className={s.link}>
-          Kitchen sink
-          <span className={s.arrow} aria-hidden="true">→</span>
-        </Link>
+        <div className={s.links}>
+          <Link href="/sign-in" className={s.link}>
+            Sign in
+            <span className={s.arrow} aria-hidden="true">→</span>
+          </Link>
+          <Link href="/kitchen-sink" className={s.linkQuiet}>Kitchen sink</Link>
+        </div>
       </div>
 
       <div className={s.foot}>Next · CSS Modules · own tokens</div>

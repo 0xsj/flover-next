@@ -9,6 +9,7 @@ import { OverlaysSection } from "./overlays";
 import { TypeComponentsSection } from "./groups";
 import { UtilitySection } from "./utility";
 import { ChromeSection } from "./chrome";
+import { ShellsSection } from "./shells";
 import { TokensSection } from "./tokens";
 import { TypographySection } from "./typography";
 
@@ -28,6 +29,7 @@ export const SECTIONS: readonly Entry[] = [
   { id: "overlays", label: "Overlays", Section: OverlaysSection },
   { id: "utility", label: "Utility", Section: UtilitySection },
   { id: "chrome", label: "Chrome", Section: ChromeSection },
+  { id: "shells", label: "Shells", Section: ShellsSection },
   { id: "type-components", label: "Type components", Section: TypeComponentsSection },
   { id: "data", label: "Data and failures", Section: DataSection },
 ];

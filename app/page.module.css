@@ -104,4 +104,11 @@
     font-size: var(--text-11);
     color: var(--ink-4);
   }
+
+  .links { display: flex; align-items: center; gap: var(--space-8); flex-wrap: wrap; }
+  .linkQuiet {
+    font-size: var(--text-12-5);
+    color: var(--ink-4);
+  }
+  .linkQuiet:hover { color: var(--ink-2); }
 }

@@ -10,9 +10,16 @@ export type { LucideIcon, LucideProps } from "lucide-react";
 export {
   Check,
   ChevronDown,
+  History,
+  LayoutGrid,
   LoaderCircle,
+  LogOut,
   Minus,
   Plus,
+  Settings,
+  Sparkles,
   Trash2,
+  TriangleAlert,
   X,
+  Zap,
 } from "lucide-react";

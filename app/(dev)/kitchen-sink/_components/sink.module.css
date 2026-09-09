@@ -407,6 +407,22 @@
 
   .navWidth { inline-size: 220px; }
 
+  /* ── shells ─────────────────────────────────────────────────────────── */
+
+  /* A whole-page composite, clipped. `min-block-size: 100dvh` is right on a
+     route and wrong in a gallery, so the shell takes a class on its outer
+     element and the stage supplies the height instead. */
+  .shellStage {
+    block-size: 340px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-2);
+    /* Its own containing block, so the shell's sticky header sticks to the top
+       of the stage rather than to the page behind it. */
+    contain: paint;
+  }
+  .shellFill { min-block-size: 100%; block-size: 100%; }
+
   /* ── utility ────────────────────────────────────────────────────────── */
 
   .icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-4); }

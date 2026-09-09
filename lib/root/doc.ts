@@ -28,7 +28,7 @@
  * than pretending a server answered. A caller with its own fixtures passes them
  * in rather than editing this tier.
  *
- * # `usingFixtures` is transport-level PROVENANCE
+ * # `usingFixtures` is transport-level PROVENANCE, per domain
  *
  * The one provenance fact a template genuinely owns: did this value come from a
  * fixture or a server? A screen showing fixture data should be able to say so,
@@ -41,11 +41,15 @@
  *
  * # What is deliberately NOT here
  *
- * **A per-domain served list.** The project this was extracted from picks an
- * adapter per domain, so a backend can graduate one domain at a time while the
- * rest stay on fixtures. That is genuinely good and it needs domains to exist;
- * a `Domain` union with no members is a modelled state with no caller. Add the
- * dimension when the first service lands.
+ * **Nothing, now.** A per-domain served list was deferred here until domains
+ * existed — a `Domain` union with no members being a modelled state with no
+ * caller. Three landed, so the deferral expired and `clientFor(domain)` is the
+ * result: two questions rather than one, *is there a backend* and *is this
+ * domain finished*, so the first endpoint to ship does not wait for the last.
+ *
+ * `served` defaults to every domain, so a base url on its own does the obvious
+ * thing. Naming a subset is the graduation; naming none is a base url
+ * configured and deliberately unused.
  *
  * **A session.** Reading and writing a bearer is framework work — a cookie on
  * one runtime, a store on another — and putting it here would cost this tier

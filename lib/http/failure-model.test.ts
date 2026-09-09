@@ -198,7 +198,12 @@ describe("4 · the port returns Result", () => {
   it("a refusal from the fixture has the shape the wire would produce", async () => {
     const r = await listTargets(anon, "w1");
     if (r.ok) throw new Error("expected failure");
-    expect(r.error).toEqual({ kind: "unauthenticated", message: "Sign in to continue.", status: 401 });
+    /* AMENDED 2026-09-09, and the reason is the assertion's own title: a wire
+       refusal carries a request id, so a fixture that minted none was the thing
+       failing to reproduce the wire. See custody/evidence/0001/06-amendments.md. */
+    const { requestId, ...rest } = r.error;
+    expect(requestId).toMatch(/^req_/);
+    expect(rest).toEqual({ kind: "unauthenticated", message: "Sign in to continue.", status: 401 });
   });
   it("fields exist on invalid and are typed there", async () => {
     const r = await createTarget(client, { name: "", host: "!!" });

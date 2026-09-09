@@ -57,7 +57,7 @@ export function ChaosCase() {
       const root = createRoot({ routes, chaos: parsePlan(query) });
       // The signal reaches the request, so `cancel` genuinely cancels it —
       // and a hung promise is released rather than leaked per click.
-      const result = await listItems(root.client, "w1", { signal: controller.signal });
+      const result = await listItems(root.clientFor("example"), "w1", { signal: controller.signal });
       if (controller.signal.aborted) return;
 
       const presence = presenceOf(result.map((r) => (r.length ? r : null)));
