@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { narrow, optional, absentWhenType, err, notFound, type Failure } from "@/lib/kernel";
+import { narrow, optional, absentWhenType, err, notFound, type Failure } from "../kernel";
 import {
   CORRELATION_HEADER, createFetchClient, createMemoryClient, type MemoryRoute,
-} from "@/lib/http";
+} from ".";
 
 /* Ordinary tests, written alongside the seam. The barriered spec suite predates
  * correlation entirely and does not cover it — see ADR 0003. */

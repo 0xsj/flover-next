@@ -17,12 +17,12 @@ import {
   internal, invalid, isTransport, narrow, notFound, ok, optional, absentWhenType, anyNotFound,
   presenceOf, rateLimited, retryDelay, timeout, TRANSPORT_KINDS, unauthenticated, unwrap,
   type Failure, type Fails, type Result, type TransportFailure,
-} from "@/lib/kernel";
+} from "../kernel";
 import {
   createFetchClient, createMemoryClient, failureFromTransport, requireToken, UNSERVED_ROUTE,
   type MemoryRoute,
-} from "@/lib/http";
-import type { HttpClient } from "@/lib/http";
+} from ".";
+import type { HttpClient } from ".";
 
 /* A minimal service, defined HERE rather than imported, so this suite ships
  * with `lib` and does not depend on an example domain that a clone will delete.

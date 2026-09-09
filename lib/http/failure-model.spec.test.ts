@@ -65,10 +65,10 @@ import {
   AppError,
   unwrap,
   asFailure,
-} from "@/lib/kernel";
-import type { Failure, FailureKind } from "@/lib/kernel";
+} from "../kernel";
+import type { Failure, FailureKind } from "../kernel";
 
-import { createFetchClient, createMemoryClient, requireToken } from "@/lib/http";
+import { createFetchClient, createMemoryClient, requireToken } from ".";
 
 // One constructed instance per kind, reused across guard/retry/narrow tests
 // so those sections don't each re-derive their own fixtures.

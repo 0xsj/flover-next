@@ -83,7 +83,7 @@ describe("a Result never crosses the server/client boundary", () => {
  * difference between "the same design" and "the same bytes", and it is the kind
  * of thing that gets added without anyone noticing. */
 describe("lib/kernel and lib/http are copyable between the siblings", () => {
-  const PORTABLE = ["lib/kernel", "lib/http"];
+  const PORTABLE = ["lib/kernel", "lib/http", "lib/chaos", "lib/root"];
 
   async function sources(): Promise<Array<{ file: string; text: string }>> {
     const out: Array<{ file: string; text: string }> = [];

@@ -120,6 +120,22 @@ subject hashes below are the whole of the claim.
 
     oracle    01-contract.md            c367098ccab16d27…
               02-api-surface.txt        b2bc11f96341b705…  (filed, NOT passed)
-    suite     as written                0faf20ab7772bbba…
-              as run                    026b78795a440bd0…
-    baseline  lib/failure-model.test.ts 6421c800df1114cb…
+    suite     as written                0faf20ab7772bbba…   suite/failure-model.spec.ts
+              as run                    cc1a9146fcf27e04…   lib/http/failure-model.spec.test.ts
+    baseline  as run                    63d17e48688d22b3…   lib/http/failure-model.test.ts
+
+## Amendment · 2026-09-09 — the run subjects moved
+
+The two runnable suites were relocated from `lib/` into `lib/http`, the lowest
+tier permitted to import both the kernel and the transport, and their imports
+were rewritten from the project alias to relative paths so they travel with the
+tier they cover.
+
+**The as-run hashes above changed, and both are restated rather than quietly
+corrected** — that is the whole point of recording them. What did NOT change is
+`suite/failure-model.spec.ts`, the as-written artifact the barriered writer
+produced: `0faf20ab7772bbba…`, byte-identical, which is the hash the provenance
+claim actually rests on.
+
+The edits were a directory move and four import specifiers. No expectation was
+touched, and the mutation result below was re-run afterwards and is unchanged.
