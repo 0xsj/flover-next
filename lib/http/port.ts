@@ -33,6 +33,15 @@ export type ClientConfig = {
 export const CORRELATION_HEADER = "x-correlation-id";
 export const REQUEST_ID_HEADER = "x-request-id";
 
+/** What a CALLER may pass to a service.
+ *
+ *  Deliberately a strict subset of `RequestOptions`: a caller may cancel, and
+ *  may not set a header, a path or a query — those belong to the service, which
+ *  is the only tier permitted to name them. Without this a request cannot be
+ *  cancelled at all from above the transport, which makes the `canceled` kind
+ *  unreachable however carefully every tier defends it. */
+export type CallOptions = { signal?: AbortSignal };
+
 export type RequestOptions = {
   /** `undefined` values are dropped rather than sent as the string "undefined". */
   params?: Record<string, string | number | boolean | undefined>;

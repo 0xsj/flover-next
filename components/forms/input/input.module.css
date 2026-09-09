@@ -1,0 +1,45 @@
+@layer primitive {
+  .input {
+    inline-size: 100%;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-2);
+    background: var(--surface-sunk);
+    color: var(--ink);
+    font-size: var(--text-12-5);
+    transition: border-color var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+  }
+
+  .input::placeholder { color: var(--ink-4); }
+  .input:hover:not(:disabled):not([readonly]) { border-color: var(--line-heavy); }
+
+  /* Keyed on the ARIA attribute, not a class. A control that announces itself
+     invalid also looks it, and the two cannot drift. */
+  .input[aria-invalid] { border-color: var(--crit); background: var(--crit-tint); }
+
+  /* READ-ONLY IS NOT DISABLED, and they must not look alike.
+     Read-only: the value matters, is selectable and copyable, and is still in
+     the tab order. Disabled: the control is out of play. Rendering them the
+     same teaches people that greyed-out text cannot be copied. */
+  .input[readonly] {
+    background: var(--surface-panel-2);
+    border-color: var(--line);
+    color: var(--ink-2);
+    cursor: default;
+  }
+
+  .input:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+  .multiline {
+    block-size: auto;
+    min-block-size: calc(var(--control-lg) * 2);
+    padding-block: var(--space-4);
+    line-height: var(--leading-body);
+    resize: vertical;
+  }
+
+  .sm { block-size: var(--control-sm); padding-inline: var(--space-4); font-size: var(--text-11-5); }
+  .md { block-size: var(--control-md); padding-inline: var(--space-5); }
+  .lg { block-size: var(--control-lg); padding-inline: var(--space-6); font-size: var(--text-13); }
+}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { QueryProvider } from "@/lib/query";
 import { CaseNav } from "./_components/case-nav";
 import { ThemeSwitch } from "./_components/theme-switch";
 import { SECTIONS } from "./_sections/registry";
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 
 export default function KitchenSinkLayout({ children }: LayoutProps<"/kitchen-sink">) {
   return (
+    <QueryProvider>
     <div className={s.shell}>
       <header className={s.header}>
         <div className={s.headerInner}>
@@ -44,5 +46,6 @@ export default function KitchenSinkLayout({ children }: LayoutProps<"/kitchen-si
         </main>
       </div>
     </div>
+    </QueryProvider>
   );
 }

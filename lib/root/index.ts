@@ -61,7 +61,7 @@ export function createRoot(options: RootOptions = {}): Root {
         getCorrelationId: () => correlationId,
       });
 
-  const client = withChaos(base, options.chaos);
+  const client = withChaos(base, options.chaos, correlationId);
 
   return { client, correlationId, usingFixtures, underChaos: client !== base };
 }

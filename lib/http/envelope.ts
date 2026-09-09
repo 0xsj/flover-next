@@ -24,6 +24,14 @@ type Problem = {
   request_id?: unknown;
   correlation_id?: unknown;
   retry_after?: unknown;
+  /* Both spellings, deliberately. A backend that speaks camelCase is not wrong,
+     the two conventions are equally common in problem documents, and this file
+     is the anti-corruption layer — being liberal in what it accepts is its job.
+     Found by a test writer who had only the contract, which said "taken from
+     the body" and did not name a case. Its reading was reasonable. */
+  requestId?: unknown;
+  correlationId?: unknown;
+  retryAfter?: unknown;
 };
 
 /** Used ONLY when the body carries no `kind` — a proxy's 502, an HTML error
@@ -73,7 +81,9 @@ function build(kind: FailureKind, meta: FailureMeta, problem: Problem, response:
     case "rate_limited":
       return {
         kind, ...meta,
-        retryAfter: num(problem.retry_after) ?? num(response.headers.get("retry-after")),
+        retryAfter:
+          num(problem.retry_after) ?? num(problem.retryAfter) ??
+          num(response.headers.get("retry-after")),
       };
     default:
       return { kind, ...meta };
@@ -101,11 +111,14 @@ export const failureFromResponse: FailureDecoder = async (response) => {
     /* An unrecognised server kind is PRESERVED, not discarded. The union stays
        closed at runtime and the raw value is still there to read. */
     type: str(problem.type) ?? (!known ? str(declared) : undefined),
-    requestId: str(problem.request_id) ?? response.headers.get(REQUEST_ID_HEADER) ?? undefined,
+    requestId:
+      str(problem.request_id) ?? str(problem.requestId) ??
+      response.headers.get(REQUEST_ID_HEADER) ?? undefined,
     /* An ECHO. The client attaches what it sent when the server returns none,
        so this being absent here does not mean the failure has no correlation. */
     correlationId:
-      str(problem.correlation_id) ?? response.headers.get(CORRELATION_HEADER) ?? undefined,
+      str(problem.correlation_id) ?? str(problem.correlationId) ??
+      response.headers.get(CORRELATION_HEADER) ?? undefined,
     status: response.status,
   };
 

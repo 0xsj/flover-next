@@ -1,0 +1,6 @@
+@layer primitive {
+  .field { display: grid; gap: var(--space-3); }
+  .required { color: var(--crit); }
+  .error { font-size: var(--text-11-5); line-height: var(--leading-snug); color: var(--crit); }
+  .hint { font-size: var(--text-11-5); line-height: var(--leading-snug); color: var(--ink-4); }
+}

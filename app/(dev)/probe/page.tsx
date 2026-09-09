@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { assertNever, err, forbidden, ok, presenceOf, type Failure } from "@/lib/kernel";
+import { listItems, type Item } from "@/lib/services/example";
 import type { MemoryRoute } from "@/lib/http";
 import { parsePlan } from "@/lib/chaos";
 import { createRoot } from "@/lib/root";
@@ -11,31 +12,29 @@ import s from "./probe.module.css";
  * three states. Nothing below the root knows chaos exists, and the service is
  * the same one-liner it would be in production. */
 
-type Target = { id: string; name: string };
-
 /** This screen's own fixtures. The shipped table is empty because a template has
  *  no domain; a caller with fixtures passes them in rather than editing the
  *  tier. Note it REFUSES as well as succeeding. */
 const routes: MemoryRoute[] = [
   {
     method: "GET",
-    pattern: /^\/targets$/,
+    pattern: /^\/items$/,
     handle: (req) =>
       req.params?.workspace === "locked"
         ? err(forbidden("Not your workspace.", { status: 403 }))
         : ok([
-            { id: "t1", name: "api.example.com" },
-            { id: "t2", name: "www.example.com" },
-          ] satisfies Target[]),
+            { id: "i1", name: "api", host: "api.example.com" },
+            { id: "i2", name: "www", host: "www.example.com" },
+          ] satisfies Item[]),
   },
 ];
 
 const PLANS = [
   ["", "no plan — the fixtures answer"],
-  ["?chaos=GET /targets=empty:list", "looked and found nothing"],
-  ["?chaos=GET /targets=fail:forbidden", "nobody looked"],
-  ["?chaos=GET /targets=fail:rate_limited", "and it keeps the retry-after"],
-  ["?chaos=GET /targets=latency:2000", "a slow server render"],
+  ["?chaos=GET /items=empty:list", "looked and found nothing"],
+  ["?chaos=GET /items=fail:forbidden", "nobody looked"],
+  ["?chaos=GET /items=fail:rate_limited", "and it keeps the retry-after"],
+  ["?chaos=GET /items=latency:2000", "a slow server render"],
   ["?workspace=locked", "the fixture's own refusal, no chaos involved"],
 ] as const;
 
@@ -59,10 +58,10 @@ export default async function ProbePage({
     chaos: parsePlan(query),
   });
 
-  // An ordinary service call. It has no idea any of the above happened.
-  const result = await root.client.get<Target[]>("/targets", {
-    params: { workspace: query.get("workspace") ?? "w1" },
-  });
+  /* An ordinary service call. It has no idea any of the above happened — and
+     this screen never names an endpoint, which is the rule `lib/services`
+     exists to hold. */
+  const result = await listItems(root.client, query.get("workspace") ?? "w1");
 
   const presence = presenceOf(result.map((rows) => (rows.length ? rows : null)));
 

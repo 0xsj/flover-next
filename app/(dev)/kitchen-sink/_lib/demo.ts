@@ -1,20 +1,21 @@
-import { ok, type Result, type Failure } from "@/lib/kernel";
-import { createMemoryClient, type MemoryRoute } from "@/lib/http";
-import type { HttpClient } from "@/lib/http";
+import { err, ok, notFound } from "@/lib/kernel";
+import type { MemoryRoute } from "@/lib/http";
+import { NO_DEFAULT, type Item } from "@/lib/services/example";
 
-/** The smallest real thing to break: one route, one service, one shape. */
-export type Row = { id: string; name: string };
+/* This screen's fixtures. It supplies routes; it does not name an endpoint in a
+   request — the service does that, which is the rule the tier exists for. */
 
-const rows: Row[] = [
-  { id: "t1", name: "api.example.com" },
-  { id: "t2", name: "www.example.com" },
+const items: Item[] = [
+  { id: "i1", name: "api", host: "api.example.com" },
+  { id: "i2", name: "www", host: "www.example.com" },
 ];
 
-const routes: MemoryRoute[] = [
-  { method: "GET", pattern: /^\/demo$/, handle: () => ok(rows) },
+export const routes: MemoryRoute[] = [
+  { method: "GET", pattern: /^\/items$/, handle: () => ok(items) },
+  {
+    method: "GET",
+    pattern: /^\/workspaces\/[^/]+\/default-item$/,
+    // The refusal that MEANS absence, tagged so the service can recognise it.
+    handle: () => err(notFound("No default set.", { status: 404, type: NO_DEFAULT })),
+  },
 ];
-
-export const demoClient = (): HttpClient => createMemoryClient({ routes, latencyMs: 120 });
-
-export const listRows = (client: HttpClient): Promise<Result<Row[], Failure>> =>
-  client.get<Row[]>("/demo");

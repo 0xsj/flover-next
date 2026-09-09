@@ -341,4 +341,67 @@
     border-radius: var(--radius-2);
     padding: var(--space-5) var(--space-6);
   }
+
+  /* ── failure path ───────────────────────────────────────────────────── */
+
+  .hops { display: grid; gap: var(--space-2); }
+  .hop {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: baseline;
+    padding: var(--space-3) 0;
+    border-block-end: 1px solid var(--line);
+  }
+  .hop:last-child { border-block-end: none; }
+  .hopTier {
+    font-family: var(--font-mono);
+    font-size: var(--text-10);
+    color: var(--accent);
+  }
+  .hopWhat { font-size: var(--text-11-5); line-height: var(--leading-body); color: var(--ink-3); }
+
+  .warnText { font-size: var(--text-12-5); color: var(--warn); }
+  .fieldList { display: grid; gap: var(--space-1); font-size: var(--text-12-5); color: var(--crit); }
+
+  .fieldGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-7);
+    align-items: start;
+  }
+
+  .choice { display: flex; align-items: center; gap: var(--space-4); font-size: var(--text-12-5); color: var(--ink-2); }
+
+  /* ── an unbuilt group ───────────────────────────────────────────────── */
+
+  .planned {
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius-3);
+    padding: var(--space-6);
+    background: var(--surface-panel-2);
+  }
+  .plannedHead { margin-block-end: var(--space-5); }
+  .plannedCount {
+    font-family: var(--font-mono);
+    font-size: var(--text-10);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--ink-4);
+  }
+  .plannedList { display: grid; gap: var(--space-3); list-style: none; margin: 0; padding: 0; }
+  .plannedItem {
+    display: grid;
+    grid-template-columns: 148px minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: baseline;
+    padding-block-end: var(--space-3);
+    border-block-end: 1px solid var(--line);
+  }
+  .plannedItem:last-child { border-block-end: none; }
+  .plannedName { font-size: var(--text-12-5); color: var(--ink-4); }
+  .plannedItem[data-built] .plannedName { color: var(--accent); }
+  .plannedNote { font-size: var(--text-11-5); line-height: var(--leading-snug); color: var(--ink-4); }
+
+  .selectWidth { inline-size: 240px; }
 }

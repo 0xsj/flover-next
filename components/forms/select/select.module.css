@@ -1,0 +1,51 @@
+@layer primitive {
+  .trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    inline-size: 100%;
+    block-size: var(--control-md);
+    padding-inline: var(--space-5);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-2);
+    background: var(--surface-sunk);
+    color: var(--ink);
+    font-size: var(--text-12-5);
+    text-align: start;
+    transition: border-color var(--dur-1) var(--ease);
+  }
+
+  .trigger:hover:not(:disabled) { border-color: var(--line-heavy); }
+  .trigger[aria-invalid] { border-color: var(--crit); background: var(--crit-tint); }
+  .trigger:disabled { opacity: 0.45; cursor: not-allowed; }
+  .trigger[data-placeholder] { color: var(--ink-4); }
+
+  .chevron { color: var(--ink-4); flex: none; }
+
+  .content { z-index: var(--z-palette); min-inline-size: var(--radix-select-trigger-width); }
+  .viewport { padding: var(--space-2); max-block-size: 280px; }
+
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    block-size: var(--control-md);
+    padding-inline: var(--space-5);
+    border-radius: var(--radius-1);
+    font-size: var(--text-12-5);
+    color: var(--ink-2);
+    cursor: default;
+    outline: none;
+  }
+
+  /* Highlight follows `data-highlighted`, which the primitive sets for BOTH
+     pointer and keyboard. A `:hover` rule alone leaves keyboard users with no
+     indication of where they are. */
+  .item[data-highlighted] { background: var(--surface-hover); color: var(--ink); }
+  .item[data-state="checked"] { color: var(--ink); }
+  .item[data-disabled] { opacity: 0.45; }
+
+  .tick { color: var(--accent); flex: none; }
+}

@@ -1,38 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { DENSITIES, THEMES } from "@/lib/runtime";
+import { useDensity, useHydrateRuntime, useTheme } from "@/lib/runtime/hooks";
 import s from "./theme-switch.module.css";
 
-/* Deliberately local to the dev route rather than in `lib/runtime` or
-   `components/chrome`. The real one belongs in a tier neither of which is built
-   yet, and a placeholder there would be a modelled tier with no caller. This is
-   scaffolding for a page whose whole job is to be looked at. */
-
-type Choice = "system" | "light" | "dark";
-const CHOICES: Choice[] = ["system", "light", "dark"];
+/* Was local to this route because `lib/runtime` did not exist. It does now, so
+   the state lives there and this is only the control. */
 
 export function ThemeSwitch() {
-  const [choice, setChoice] = useState<Choice>("system");
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (choice === "system") delete root.dataset.theme;
-    else root.dataset.theme = choice;
-  }, [choice]);
+  useHydrateRuntime();
+  const theme = useTheme();
+  const density = useDensity();
 
   return (
-    <div className={s.group} role="group" aria-label="Theme">
-      {CHOICES.map((c) => (
-        <button
-          key={c}
-          type="button"
-          className={s.option}
-          aria-pressed={choice === c}
-          onClick={() => setChoice(c)}
-        >
-          {c}
-        </button>
-      ))}
+    <div className={s.row}>
+      <div className={s.group} role="group" aria-label="Theme">
+        {THEMES.map((t) => (
+          <button
+            key={t}
+            type="button"
+            className={s.option}
+            aria-pressed={theme.choice === t}
+            onClick={() => theme.set(t)}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+
+      <div className={s.group} role="group" aria-label="Density">
+        {DENSITIES.map((d) => (
+          <button
+            key={d}
+            type="button"
+            className={s.option}
+            aria-pressed={density.value === d}
+            onClick={() => density.set(d)}
+          >
+            {d}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

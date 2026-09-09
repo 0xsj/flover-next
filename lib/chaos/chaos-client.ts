@@ -40,7 +40,15 @@ const sleep = (ms: number, signal?: AbortSignal) =>
  *  A NO-OP in production, structurally: the wrapper is not applied at all, so
  *  the only way a live user meets chaos is a deliberate change to this line.
  *  Belt and braces with the composition root being the only permitted caller. */
-export function withChaos(client: HttpClient, plan: Plan | undefined): HttpClient {
+export function withChaos(
+  client: HttpClient,
+  plan: Plan | undefined,
+  /** The interaction this client belongs to. A forced failure is manufactured
+   *  HERE rather than by an adapter, so nothing else can attach it — and a
+   *  failure that cannot name its interaction is the one you most want to
+   *  trace. The composition root supplies it. */
+  correlationId?: string,
+): HttpClient {
   if (process.env.NODE_ENV === "production") return client;
   if (!isActive(plan) || !plan) return client;
 
@@ -67,7 +75,10 @@ export function withChaos(client: HttpClient, plan: Plan | undefined): HttpClien
     }
 
     if (effect.empty) return ok((effect.empty === "list" ? [] : null) as T);
-    if (effect.fail) return err(FAILURES[effect.fail](`Chaos: forced ${effect.fail}.`));
+    if (effect.fail) {
+      const failure = FAILURES[effect.fail](`Chaos: forced ${effect.fail}.`);
+      return err(correlationId === undefined ? failure : { ...failure, correlationId });
+    }
 
     return client.request<T>(method, path, options);
   };

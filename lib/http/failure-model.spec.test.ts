@@ -549,7 +549,7 @@ describe("9 · Result", () => {
     });
 
     it("returns the fallback on Err", () => {
-      expect(err<number>(internal("boom")).unwrapOr(0)).toBe(0);
+      expect(err(internal("boom")).unwrapOr(0)).toBe(0);
     });
   });
 
@@ -929,8 +929,7 @@ describe("12 · the transport port", () => {
       }
     });
 
-    // TRIAGED — SPEC GAP: the contract says a request id is "taken from the body" but never names the wire key. The implementation reads `request_id`; this test sends `requestId`.
-    it.skip("takes requestId from the body when present", async () => {
+    it("takes requestId from the body when present", async () => {
       vi.stubGlobal(
         "fetch",
         async () =>
@@ -968,8 +967,7 @@ describe("12 · the transport port", () => {
       }
     });
 
-    // TRIAGED — SPEC GAP: same — the implementation reads `retry_after`; this test sends `retryAfter`.
-    it.skip("takes retryAfter from the body when present, for rate_limited", async () => {
+    it("takes retryAfter from the body when present, for rate_limited", async () => {
       vi.stubGlobal(
         "fetch",
         async () =>
@@ -1031,7 +1029,7 @@ describe("12 · the transport port", () => {
       }
     });
 
-    // TRIAGED — SPEC GAP: the contract never states the time budget is configurable, nor its default (15s). With no `timeoutMs` the test outlives the runner's own 5s limit. The ASSERTION is correct; only the setup is unreachable from the contract.
+    // TRIAGED — SPEC GAP, AMENDED — see custody/evidence/0001/06-amendments. The contract now states the budget is settable per client and per request and that it defaults to 15s. This test predates that amendment and cannot pass as written: with no `timeoutMs` it outlives the runner's own 5s limit. The ASSERTION is correct. A future barriered run against the amended contract would produce a passing version; hand-editing this one against the implementation is what the barrier exists to prevent.
     it.skip("maps exceeding its own time budget to timeout — distinct from cancellation, and retryable", async () => {
       vi.stubGlobal("fetch", () => new Promise(() => {})); // never settles
       try {
@@ -1201,7 +1199,7 @@ describe("12 · the transport port", () => {
   // described anywhere in the numbered contract. Testing only the one behaviour that any
   // reasonable reading of its name would require.
   describe("requireToken", () => {
-    // TRIAGED — SPEC GAP: `requireToken` was named in the tooling note but its semantics were never specified. It returns a Result, not a bare token. The writer flagged this as unspecified and guessed.
+    // TRIAGED — SPEC GAP, AMENDED — see custody/evidence/0001/06-amendments. `requireToken` is now specified as returning a Result. This test predates that and asserts a bare token; it cannot pass as written, and regenerating it is a barriered run's job rather than an edit.
     it.skip("returns the token carried on a request that has one", () => {
       const request = { method: "GET", path: "/me", params: {}, body: undefined, token: "tok-1" };
       expect(requireToken(request as any)).toBe("tok-1");

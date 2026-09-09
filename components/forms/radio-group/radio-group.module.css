@@ -1,0 +1,26 @@
+@layer primitive {
+  .group { display: grid; gap: var(--space-4); }
+
+  .radio {
+    display: inline-grid;
+    place-items: center;
+    inline-size: 16px;
+    block-size: 16px;
+    flex: none;
+    border: 1px solid var(--line-heavy);
+    border-radius: var(--radius-pill);
+    background: var(--surface-sunk);
+    transition: border-color var(--dur-1) var(--ease);
+  }
+
+  .radio:hover:not(:disabled) { border-color: var(--ink-4); }
+  .radio[data-state="checked"] { border-color: var(--fill); }
+  .radio:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .indicator {
+    inline-size: 8px;
+    block-size: 8px;
+    border-radius: var(--radius-pill);
+    background: var(--fill);
+  }
+}

@@ -83,7 +83,7 @@ describe("a Result never crosses the server/client boundary", () => {
  * difference between "the same design" and "the same bytes", and it is the kind
  * of thing that gets added without anyone noticing. */
 describe("lib/kernel and lib/http are copyable between the siblings", () => {
-  const PORTABLE = ["lib/kernel", "lib/http", "lib/chaos", "lib/root"];
+  const PORTABLE = ["lib/kernel", "lib/http", "lib/chaos", "lib/root", "lib/services"];
 
   async function sources(): Promise<Array<{ file: string; text: string }>> {
     const out: Array<{ file: string; text: string }> = [];
@@ -112,5 +112,34 @@ describe("lib/kernel and lib/http are copyable between the siblings", () => {
 
   it("reads the files it claims to", async () => {
     expect((await sources()).length).toBeGreaterThan(6);
+  });
+});
+
+/* Only `lib/services` names an endpoint.
+ *
+ * CLAUDE.md: nothing above `lib/services` names a URL, a status code or a
+ * header. The tier exists to hold that, and it was violated by two dev screens
+ * calling the transport directly — which compiled, worked, and looked
+ * reasonable, which is exactly why it needs a check rather than a sentence. */
+describe("only lib/services names an endpoint", () => {
+  // A path string handed straight to a transport method.
+  const CALLS_BY_URL = /\.(get|post|put|patch|delete|request)\s*(<[^>]*>)?\s*\(\s*[`"']\//;
+
+  it("no screen or component calls the transport by path", async () => {
+    const offenders: string[] = [];
+    for (const dir of ["app", "components"]) {
+      for await (const file of walk(path.join(process.cwd(), dir))) {
+        const text = await readFile(file, "utf8");
+        if (CALLS_BY_URL.test(text)) offenders.push(path.relative(process.cwd(), file));
+      }
+    }
+    expect(offenders, "call a service; only lib/services may name an endpoint").toEqual([]);
+  });
+
+  it("the pattern can actually see a violation", () => {
+    expect(CALLS_BY_URL.test('const r = await client.get<Item[]>("/items");')).toBe(true);
+    expect(CALLS_BY_URL.test("await root.client.post(`/items/${id}`, {})")).toBe(true);
+    // and does not fire on a service call, which is what should be there instead
+    expect(CALLS_BY_URL.test("const r = await listItems(root.client, workspace);")).toBe(false);
   });
 });

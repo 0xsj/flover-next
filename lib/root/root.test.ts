@@ -76,6 +76,15 @@ describe("chaos composes here and nowhere else", () => {
     expect(r.ok && r.value).toEqual([]);
   });
 
+  it("a FORCED failure still names its interaction", async () => {
+    // The chaos wrapper manufactures the failure itself and returns before any
+    // adapter runs, so nothing downstream can attach the id. It must do it.
+    const root = createRoot({ routes, chaos: { rules: [["*", { fail: "conflict" }]] } });
+    const r = await root.client.get("/thing");
+    if (r.ok) throw new Error("expected a failure");
+    expect(r.error.correlationId).toBe(root.correlationId);
+  });
+
   it("is inert in production, so a plan cannot reach a live user", () => {
     const before = process.env.NODE_ENV;
     vi.stubEnv("NODE_ENV", "production");

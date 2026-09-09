@@ -1,4 +1,6 @@
 @layer screen {
+  .row { display: flex; gap: var(--space-4); flex-wrap: wrap; }
+
   .group {
     display: inline-flex;
     gap: var(--space-1);

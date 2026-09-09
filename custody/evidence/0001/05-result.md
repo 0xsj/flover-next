@@ -102,6 +102,11 @@ marketing document.
 
 ## Recommended contract amendments — for the author, not this runner
 
+> **Acted on 2026-09-09 — see [`06-amendments.md`](06-amendments.md).** Two were
+> wording; two turned out to be defects in the implementation. `01-contract.md`
+> is unchanged, and its hash still covers what the writer was given.
+
+
 1. §12 should name the body keys as it already names the header keys:
    `request_id`, `retry_after`.
 2. §12 should state that a request carries a time budget, that it is settable

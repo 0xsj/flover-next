@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { Button } from "@/components/forms";
+import { Button, Field, Fieldset, Input, Textarea } from "@/components/forms";
 import { Plus, Trash2 } from "@/components/utility";
 import { Case, Row, Section } from "../_components/section";
+import { ChoicesCase } from "./choices-case";
 import { readSources } from "../_lib/source";
 import s from "../_components/sink.module.css";
 
@@ -13,9 +14,15 @@ import s from "../_components/sink.module.css";
    point: a Button that manufactured one could not render here at all. */
 export async function FormsSection() {
   const sources = await readSources([
+    "forms/field/field.tsx",
     "forms/button/button.tsx",
     "forms/button/button.variants.ts",
     "forms/button/button.module.css",
+  ]);
+
+  const fieldSources = await readSources([
+    "forms/field/field.tsx",
+    "forms/input/input.tsx",
   ]);
 
   return (
@@ -85,6 +92,92 @@ export async function FormsSection() {
           not want followed.
         </p>
       </Case>
+
+      <Case
+        title="Inputs and fields"
+        note="Field owns the label, hint and error · Fieldset does the same for a group"
+        sources={fieldSources}
+      >
+        <Row label="a field">
+          <div className={s.fieldGrid}>
+            <Field label="Name">{(c) => <Input {...c} placeholder="api" />}</Field>
+            <Field label="Host" hint="A hostname, not a URL." required>
+              {(c) => <Input {...c} placeholder="api.example.com" />}
+            </Field>
+            <Field label="Host" error="That is not a hostname." required>
+              {(c) => <Input {...c} defaultValue="not a host" />}
+            </Field>
+            <Field label="Host" hint="A hostname, not a URL." error="That is not a hostname.">
+              {(c) => <Input {...c} defaultValue="!!" />}
+            </Field>
+          </div>
+        </Row>
+
+        <Row label="text controls">
+          <div className={s.fieldGrid}>
+            <Field label="Notes" hint="Markdown is not rendered.">
+              {(c) => <Textarea {...c} placeholder="Anything worth saying" />}
+            </Field>
+            <Field label="Identifier" hint="Assigned when it was created.">
+              {(c) => <Input {...c} mono readOnly defaultValue="itm_8f2a41c9" />}
+            </Field>
+            <Field label="Identifier">
+              {(c) => <Input {...c} mono disabled defaultValue="itm_8f2a41c9" />}
+            </Field>
+          </div>
+        </Row>
+
+        <Row label="a group">
+          <div className={s.fieldGrid}>
+            <Fieldset legend="Notify me" hint="You can change this later.">
+              <label className={s.choice}><input type="radio" name="n" defaultChecked /> By email</label>
+              <label className={s.choice}><input type="radio" name="n" /> By SMS</label>
+              <label className={s.choice}><input type="radio" name="n" /> Not at all</label>
+            </Fieldset>
+            <Fieldset legend="Notify me" error="Pick one.">
+              <label className={s.choice}><input type="radio" name="m" /> By email</label>
+              <label className={s.choice}><input type="radio" name="m" /> By SMS</label>
+            </Fieldset>
+          </div>
+        </Row>
+
+        <p className={s.limits}>
+          <strong>The children of a Field are a function</strong>, called with
+          exactly the attributes the control must carry — <code>id</code>,{" "}
+          <code>aria-describedby</code>, <code>aria-invalid</code>,{" "}
+          <code>required</code> — so there is nothing to render without receiving
+          them. A Field taking a node would have to reach into the child to wire
+          it, which works until somebody nests the control one level deeper and
+          then fails silently.
+        </p>
+
+        <p className={s.limits}>
+          <strong>A group keeps its wiring instead of handing it down.</strong> A
+          description applying to one radio of four would be wrong three times,
+          so it stays on the <code>&lt;fieldset&gt;</code> — which is why Fieldset
+          takes plain children rather than a function. The{" "}
+          <code>&lt;legend&gt;</code> is announced before <em>every</em> control
+          inside the group; a styled paragraph above it reads as unrelated text.
+        </p>
+
+        <p className={s.limits}>
+          <strong>Read-only is not disabled.</strong> A read-only value is
+          selectable, copyable and in the tab order; a disabled control is out of
+          play. Rendering them alike teaches people that greyed-out text cannot
+          be copied. And with both a hint and an error,{" "}
+          <code>aria-describedby</code> names the error first, because a reader
+          announces them in that order.
+        </p>
+      </Case>
+
+      <ChoicesCase />
+
+      <p className={s.limits}>
+        Rendering a <em>failure</em> in a form — per-field messages from a
+        refused write — is under <a href="#data" className={s.anchor}>Data and
+        failures</a>, with the rest of the cases where the transport tier&rsquo;s
+        vocabulary meets a component.
+      </p>
     </Section>
   );
 }

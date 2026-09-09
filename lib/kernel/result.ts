@@ -23,7 +23,7 @@ export class Ok<T, E = Failure> {
   mapErr<F>(_f: (error: E) => F): Result<T, F> { return new Ok(this.value); }
   andThen<U, F = E>(f: (value: T) => Result<U, F>): Result<U, E | F> { return f(this.value); }
   match<U>(on: { ok: (value: T) => U; err: (error: E) => U }): U { return on.ok(this.value); }
-  unwrapOr(_fallback: T): T { return this.value; }
+  unwrapOr<U>(_fallback: U): T | U { return this.value; }
   /** A side effect on the failure path only — a log, a metric. Returns `this`,
    *  so it cannot change what the caller sees. */
   tapErr(_f: (error: E) => void): Result<T, E> { return this; }
@@ -38,7 +38,7 @@ export class Err<T, E = Failure> {
   mapErr<F>(f: (error: E) => F): Result<T, F> { return new Err(f(this.error)); }
   andThen<U, F = E>(_f: (value: T) => Result<U, F>): Result<U, E | F> { return new Err(this.error); }
   match<U>(on: { ok: (value: T) => U; err: (error: E) => U }): U { return on.err(this.error); }
-  unwrapOr(fallback: T): T { return fallback; }
+  unwrapOr<U>(fallback: U): T | U { return fallback; }
   tapErr(f: (error: E) => void): Result<T, E> { f(this.error); return this; }
   toJSON() { return { ok: false as const, error: this.error }; }
 }

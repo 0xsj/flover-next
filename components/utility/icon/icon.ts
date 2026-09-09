@@ -8,7 +8,10 @@ export type { LucideIcon, LucideProps } from "lucide-react";
  *
  * Alphabetical, so a duplicate is obvious and the diff is a single line. */
 export {
+  Check,
+  ChevronDown,
   LoaderCircle,
+  Minus,
   Plus,
   Trash2,
 } from "lucide-react";
