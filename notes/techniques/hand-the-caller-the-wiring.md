@@ -43,6 +43,21 @@ A function argument cannot be lost the same way. It is not a guarantee — a
 caller can still ignore what it was handed — but the mistake moves from
 *invisible* to *visible*, and that is the honest claim to make for it.
 
+## Where the component owns the thing, make it a required PROP
+
+Handing wiring down is for attributes another element must carry. Where the
+component owns the element itself — a dialog and its own accessible name — the
+same instinct becomes: make it a required prop rather than an optional child.
+
+A dialog with no name is announced as "dialog" and nothing else. It is the
+commonest defect in that component, it is invisible to a visual review, and it
+is entirely preventable by a required string in the type. The mistake stops
+being something to remember and becomes something that does not compile.
+
+Offer a way to hide it visually, never a way to omit it: a design that names the
+overlay in its surroundings still owes a name to somebody who cannot see the
+surroundings.
+
 ## One control receives the wiring; a GROUP keeps it
 
 The rule inverts the moment there is more than one control, and getting that

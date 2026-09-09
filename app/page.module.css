@@ -67,15 +67,6 @@
     max-inline-size: 52ch;
   }
 
-  .wordmark {
-    font-size: clamp(var(--text-30), min(9vw, 13vh), 88px);
-    font-weight: var(--weight-bold);
-    letter-spacing: -0.04em;
-    line-height: 1;
-    color: var(--ink);
-    margin: 0;
-  }
-
   .tagline {
     font-size: var(--text-15);
     line-height: var(--leading-body);

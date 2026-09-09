@@ -1,0 +1,24 @@
+@layer primitive {
+  .link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    block-size: var(--control-md);
+    padding-inline: var(--space-5);
+    border-radius: var(--radius-1);
+    color: var(--ink-3);
+    font-size: var(--text-12-5);
+    border-inline-start: 2px solid transparent;
+    transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+  }
+
+  .link:hover { background: var(--surface-hover); color: var(--ink); }
+
+  /* Styled from the ARIA attribute, so a link cannot look current without
+     saying it is. One fact, one source. */
+  .link[aria-current="page"] {
+    color: var(--ink);
+    background: var(--surface-hover);
+    border-inline-start-color: var(--accent);
+  }
+}

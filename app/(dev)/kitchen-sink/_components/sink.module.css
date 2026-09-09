@@ -19,14 +19,6 @@
     max-inline-size: var(--page-max);
   }
 
-  .wordmark {
-    font-size: var(--text-12-5);
-    font-weight: var(--weight-bold);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-
   .nav { display: flex; gap: var(--space-2); flex-wrap: wrap; }
 
   .navLink {
@@ -408,4 +400,55 @@
   .statRow { display: flex; gap: var(--space-9); flex-wrap: wrap; }
   .inlineStat { display: inline-grid; }
   .inlineStat > :first-child { display: none; }
+
+  .spaceBox { background: var(--surface-panel-2); border: 1px solid var(--line); border-radius: var(--radius-2); font-size: var(--text-11-5); color: var(--ink-3); }
+  .spaceInner { display: block; block-size: 10px; background: var(--accent-dim); border-radius: var(--radius-1); }
+  .fullWidth { inline-size: 100%; }
+
+  .navWidth { inline-size: 220px; }
+
+  /* ── utility ────────────────────────────────────────────────────────── */
+
+  .icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-4); }
+  .iconCell { display: inline-flex; align-items: center; gap: var(--space-3); color: var(--ink-3); }
+
+  .readout { display: grid; gap: var(--space-4); inline-size: 100%; }
+  .readoutStage {
+    padding: var(--space-5);
+    background: var(--surface-panel-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-2);
+  }
+  .readoutRow { display: flex; align-items: baseline; gap: var(--space-4); flex-wrap: wrap; }
+  .readoutText { font-size: var(--text-11-5); color: var(--ink-2); }
+
+  /* The point of the portal case: a box that genuinely clips its content. */
+  .clip {
+    position: relative;
+    block-size: 96px;
+    overflow: hidden;
+    display: grid;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    background: var(--surface-panel-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-2);
+  }
+  .portalTarget {
+    display: grid;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius-2);
+  }
+  .escapee {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    background: var(--accent-dim);
+    border-radius: var(--radius-2);
+    font-size: var(--text-11-5);
+    color: var(--ink);
+  }
 }

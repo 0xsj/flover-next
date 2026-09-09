@@ -52,6 +52,23 @@ presses to walk past.
 Use the primitive that implements the contract, or implement all of it. Half of
 a keyboard contract is worse than none, because it looks like it works.
 
+## A ROW of them is a different promise again
+
+The same mistake scales up, and at group level it is easier to make because the
+individual controls are each defensible.
+
+    three toggle buttons    three independent on/off states. A reader is told
+                            there are three decisions here.
+    one radio group         one decision with three answers, exactly one true.
+
+A segmented control — theme, density, a view switch — is the second. Built as
+the first, every option carries `aria-pressed`, the group costs three tab stops
+instead of one, and nothing announces that choosing one un-chooses the others.
+
+It renders identically. The give-away is in the source rather than on the
+screen: if the code has to make sure exactly one is pressed, the control was a
+single-select and said otherwise.
+
 ## Gotchas
 
 **A switch with an asynchronous effect has no good loading state.** It will be

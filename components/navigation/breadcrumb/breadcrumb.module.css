@@ -1,0 +1,23 @@
+@layer primitive {
+  .nav { min-inline-size: 0; }
+  .list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--text-12);
+  }
+  .item { display: flex; min-inline-size: 0; }
+  .separator { color: var(--ink-4); user-select: none; }
+  .link { color: var(--ink-3); border-radius: var(--radius-1); }
+  .link:hover { color: var(--ink); text-decoration: underline; }
+  .current {
+    color: var(--ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

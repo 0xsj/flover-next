@@ -1,0 +1,27 @@
+@layer primitive {
+  .list {
+    display: flex;
+    gap: var(--space-2);
+    border-block-end: 1px solid var(--line);
+    overflow-x: auto;
+  }
+
+  .tab {
+    flex: none;
+    block-size: var(--control-md);
+    padding-inline: var(--space-5);
+    border-block-end: 2px solid transparent;
+    margin-block-end: -1px;
+    color: var(--ink-3);
+    font-size: var(--text-12-5);
+    white-space: nowrap;
+    transition: color var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
+  }
+
+  .tab:hover:not(:disabled) { color: var(--ink); }
+  /* Selected is a STATE the primitive reports, not a class a caller sets. */
+  .tab[data-state="active"] { color: var(--ink); border-block-end-color: var(--accent); }
+  .tab:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .panel { padding-block-start: var(--space-6); }
+}

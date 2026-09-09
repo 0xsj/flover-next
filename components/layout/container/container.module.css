@@ -1,0 +1,5 @@
+@layer primitive {
+  .container { margin-inline: auto; inline-size: 100%; }
+  .page { max-inline-size: var(--page-max); }
+  .measure { max-inline-size: var(--measure); }
+}

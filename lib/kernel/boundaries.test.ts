@@ -115,6 +115,50 @@ describe("lib/kernel and lib/http are copyable between the siblings", () => {
   });
 });
 
+/* Hydration suppression stays where it was argued for.
+ *
+ * The root layout writes theme and density onto `<html>` before hydration, on
+ * purpose, so React's comparison of that one element has to be turned off. The
+ * hazard is the next person who meets a mismatch warning somewhere else and
+ * reaches for the same word: it is one level deep, so a second use is a real
+ * mismatch being hidden rather than an expected one being acknowledged. */
+describe("only the root layout suppresses a hydration comparison", () => {
+  // Assembled, so this file is not itself an offender. Excluding test files
+  // would be the other fix and would put them outside the rule.
+  const WORD = "suppressHydration" + "Warning";
+
+  /* An attribute USE, not a mention. Preceded by whitespace and followed by the
+     end of a tag, another attribute or an expression — which is how it is
+     written and is not how it appears inside prose or a `<code>` element, since
+     the gallery documents this rule and would otherwise break it.
+
+     What it cannot see, stated because a check listing only its catches gets
+     read as a guarantee: the prop spread in from an object. That form is worth
+     catching in review and is not worth a parser here. */
+  const SUPPRESSES = new RegExp(`\\s${WORD}[\\s>=}]`);
+  const ALLOWED = path.join("app", "layout.tsx");
+
+  it("and it is app/layout.tsx", async () => {
+    const users: string[] = [];
+    for (const dir of ["app", "components", "lib"]) {
+      for await (const file of walk(path.join(process.cwd(), dir))) {
+        if (SUPPRESSES.test(await readFile(file, "utf8"))) {
+          users.push(path.relative(process.cwd(), file));
+        }
+      }
+    }
+    expect(users, "fix the mismatch; do not silence it").toEqual([ALLOWED]);
+  });
+
+  it("the check can actually see a violation", () => {
+    expect(SUPPRESSES.test(`<time ${WORD}>{now}</time>`)).toBe(true);
+    expect(SUPPRESSES.test(`<html lang="en" ${WORD}>`)).toBe(true);
+    expect(SUPPRESSES.test("<time>{now}</time>")).toBe(false);
+    // and it does not fire on the gallery explaining the rule
+    expect(SUPPRESSES.test(`<code>${WORD}</code> is one level deep`)).toBe(false);
+  });
+});
+
 /* Only `lib/services` names an endpoint.
  *
  * CLAUDE.md: nothing above `lib/services` names a URL, a status code or a

@@ -1,0 +1,5 @@
+@layer primitive {
+  .separator { background: var(--line); flex: none; }
+  .horizontal { block-size: 1px; inline-size: 100%; }
+  .vertical { inline-size: 1px; align-self: stretch; min-block-size: 1em; }
+}

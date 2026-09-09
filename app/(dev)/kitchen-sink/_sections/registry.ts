@@ -2,10 +2,13 @@ import type { ComponentType } from "react";
 import { FormsSection } from "./forms";
 import { DataSection } from "./data";
 import { DisplaySection } from "./display";
-import {
-  ChromeSection, FeedbackSection, LayoutSection,
-  NavigationSection, OverlaysSection, UtilitySection,
-} from "./groups";
+import { FeedbackSection } from "./feedback";
+import { LayoutSection } from "./layout";
+import { NavigationSection } from "./navigation";
+import { OverlaysSection } from "./overlays";
+import { TypeComponentsSection } from "./groups";
+import { UtilitySection } from "./utility";
+import { ChromeSection } from "./chrome";
 import { TokensSection } from "./tokens";
 import { TypographySection } from "./typography";
 
@@ -25,5 +28,6 @@ export const SECTIONS: readonly Entry[] = [
   { id: "overlays", label: "Overlays", Section: OverlaysSection },
   { id: "utility", label: "Utility", Section: UtilitySection },
   { id: "chrome", label: "Chrome", Section: ChromeSection },
+  { id: "type-components", label: "Type components", Section: TypeComponentsSection },
   { id: "data", label: "Data and failures", Section: DataSection },
 ];

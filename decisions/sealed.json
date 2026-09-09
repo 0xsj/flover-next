@@ -27,6 +27,15 @@
       "sealed_at": "2026-09-08T22:22:30.197Z",
       "prev": "2d963564518318cdbf0c4f1c8833a9d054d1842e34c0c910691cca6a6c588dcc",
       "history": []
+    },
+    {
+      "slug": "0004-spacing-shorthand-is-a-typed-accessor-to-the-token-scale",
+      "status": "Accepted",
+      "file": "ddc9a866c1e59f2be7ab7f3051a06b9a4c4f83b1799af2e13a5090fe4a76d5c8",
+      "body": "207665d5cb51554545107cb2ca8ce267d85471259704361f7d3e205a9d4fa0c3",
+      "sealed_at": "2026-09-09T09:23:32.796Z",
+      "prev": "b073050501b6f2df6ff67d06a5ea1d1b230f475829ddb02cfd2258ea05ecd818",
+      "history": []
     }
   ]
 }

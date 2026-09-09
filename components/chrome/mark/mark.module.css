@@ -1,0 +1,25 @@
+@layer primitive {
+  .mark {
+    font-weight: var(--weight-bold);
+    margin: 0;
+  }
+
+  /* Beside a navigation: small, uppercase, and the accent, because it is a
+     lockup rather than a heading. */
+  .inline {
+    font-size: var(--text-12-5);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* The landing. Viewport-relative because the mark IS the composition there,
+     and clamped at both ends so it neither disappears on a phone nor becomes a
+     billboard on a monitor. */
+  .display {
+    font-size: clamp(var(--text-30), min(9vw, 13vh), 88px);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--ink);
+  }
+}

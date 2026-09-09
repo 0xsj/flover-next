@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { QueryProvider } from "@/lib/query";
 import { CaseNav } from "./_components/case-nav";
-import { ThemeSwitch } from "./_components/theme-switch";
+import { DensityToggle, Mark, ThemeToggle } from "@/components/chrome";
 import { SECTIONS } from "./_sections/registry";
 import s from "./_components/sink.module.css";
 
@@ -16,13 +16,16 @@ export default function KitchenSinkLayout({ children }: LayoutProps<"/kitchen-si
     <div className={s.shell}>
       <header className={s.header}>
         <div className={s.headerInner}>
-          <span className={s.wordmark}>flover</span>
+          <Mark />
           <nav aria-label="Sections on this page" className={s.nav}>
             {SECTIONS.map(({ id, label }) => (
               <a key={id} href={`#${id}`} className={s.navLink}>{label}</a>
             ))}
           </nav>
-          <div className={s.controls}><ThemeSwitch /></div>
+          <div className={s.controls}>
+            <ThemeToggle />
+            <DensityToggle />
+          </div>
         </div>
       </header>
 

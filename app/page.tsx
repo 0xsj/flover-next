@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Mark } from "@/components/chrome";
 import s from "./page.module.css";
 
 export default function Home() {
@@ -7,7 +8,7 @@ export default function Home() {
       <div className={s.glow} aria-hidden="true" />
 
       <div className={s.body}>
-        <h1 className={s.wordmark}>flover</h1>
+        <Mark as="h1" size="display" />
 
         <p className={s.tagline}>
           A starter template, not a product. Clone it, delete what you do not

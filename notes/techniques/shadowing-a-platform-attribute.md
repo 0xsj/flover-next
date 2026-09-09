@@ -38,6 +38,18 @@ one paragraph saying which meaning survived. The paragraph matters more than the
 line: the next person to read `size="sm"` on an input has every reason to assume
 it is the platform's, because it always was.
 
+## The same rule applies to a library's defaults
+
+A wrapper that quietly flips a default is the same failure one layer out.
+Somebody reads the library's documentation, learns that a value defaults one
+way, and gets the other — with no indication that anything intervened, because
+the wrapper's name is not the library's.
+
+Keep the underlying default and document the choice, or change it and say so at
+the point of use. The tempting third option, changing it because the new default
+is "more usually what you want", is how a wrapper becomes a thing you have to
+read the source of.
+
 ## Gotchas
 
 **Only shadow a name whose platform meaning you are removing entirely.** Leaving

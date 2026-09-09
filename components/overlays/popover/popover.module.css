@@ -1,0 +1,10 @@
+@layer primitive {
+  .content {
+    z-index: var(--z-palette);
+    inline-size: min(calc(100vw - var(--space-7) * 2), 300px);
+    padding: var(--space-6);
+    font-size: var(--text-12-5);
+    line-height: var(--leading-body);
+    color: var(--ink-2);
+  }
+}

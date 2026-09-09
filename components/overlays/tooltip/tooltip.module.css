@@ -1,0 +1,15 @@
+@layer primitive {
+  .content {
+    z-index: var(--z-toast);
+    max-inline-size: 260px;
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-2);
+    background: var(--surface-raised);
+    border: 1px solid var(--line-strong);
+    box-shadow: var(--shadow);
+    color: var(--ink);
+    font-size: var(--text-11-5);
+    line-height: var(--leading-snug);
+  }
+  .arrow { fill: var(--surface-raised); }
+}

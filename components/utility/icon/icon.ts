@@ -14,4 +14,5 @@ export {
   Minus,
   Plus,
   Trash2,
+  X,
 } from "lucide-react";

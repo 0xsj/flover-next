@@ -1,3 +1,4 @@
+import { VisuallyHidden } from "@/components/utility";
 import { cn } from "@/lib/kernel";
 import s from "./avatar.module.css";
 
@@ -21,14 +22,15 @@ export function Avatar({ name, src, size = "md", className }: AvatarProps) {
         /* A plain img, not the framework's optimised one. This group is meant
            to copy to the sibling templates, and that component exists in one of
            the three. An avatar is small and usually already sized; a product
-           that wants the optimiser swaps this one line, in one file.
-           a product that wants the optimiser swaps this one line, in one file. */
+           that wants the optimiser swaps this one line, in one file. */
         // eslint-disable-next-line @next/next/no-img-element
         <img className={s.image} src={src} alt={name} />
       ) : (
         <span className={s.initials} aria-hidden="true">{initials(name)}</span>
       )}
-      {src ? null : <span className={s.hidden}>{name}</span>}
+      {/* The initials are aria-hidden, so without this the avatar identifies
+          nobody to a reader. One implementation of hiding, in utility. */}
+      {src ? null : <VisuallyHidden>{name}</VisuallyHidden>}
     </span>
   );
 }
