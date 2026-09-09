@@ -1,0 +1,41 @@
+@layer primitive {
+  /* Wide content scrolls inside its own box rather than the page. */
+  .scroll { overflow-x: auto; }
+
+  .table { inline-size: 100%; border-collapse: collapse; font-size: var(--text-12-5); }
+
+  .caption {
+    caption-side: top;
+    text-align: start;
+    padding-block-end: var(--space-4);
+    font-size: var(--text-11);
+    color: var(--ink-4);
+  }
+
+  .head { border-block-end: 1px solid var(--line-strong); }
+
+  .th {
+    text-align: start;
+    padding: var(--space-4) var(--space-5);
+    font-size: var(--text-10);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--ink-4);
+    white-space: nowrap;
+  }
+
+  .td {
+    padding: var(--space-4) var(--space-5);
+    border-block-end: 1px solid var(--line);
+    color: var(--ink-2);
+    vertical-align: baseline;
+  }
+
+  .row:last-child .td { border-block-end: none; }
+  .row:hover .td { background: var(--surface-hover); }
+
+  /* Numbers align on their digits and use tabular figures, so a column of them
+     can be compared by eye without reading each one. */
+  .numeric { text-align: end; font-variant-numeric: tabular-nums; }
+}

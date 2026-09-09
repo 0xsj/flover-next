@@ -1,0 +1,6 @@
+@layer primitive {
+  /* The two absent states must not look alike, or the component has thrown away
+     the distinction it exists to keep. */
+  .absent { color: var(--ink-3); }
+  .unmeasured { color: var(--ink-4); font-style: italic; }
+}

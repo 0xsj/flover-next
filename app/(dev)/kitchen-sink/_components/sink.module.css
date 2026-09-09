@@ -404,4 +404,8 @@
   .plannedNote { font-size: var(--text-11-5); line-height: var(--leading-snug); color: var(--ink-4); }
 
   .selectWidth { inline-size: 240px; }
+
+  .statRow { display: flex; gap: var(--space-9); flex-wrap: wrap; }
+  .inlineStat { display: inline-grid; }
+  .inlineStat > :first-child { display: none; }
 }

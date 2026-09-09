@@ -1,0 +1,22 @@
+@layer primitive {
+  .avatar {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    border-radius: var(--radius-pill);
+    background: var(--surface-raised);
+    border: 1px solid var(--line);
+    color: var(--ink-3);
+    overflow: hidden;
+    user-select: none;
+  }
+  .sm { inline-size: 20px; block-size: 20px; font-size: var(--text-9); }
+  .md { inline-size: 28px; block-size: 28px; font-size: var(--text-10); }
+  .image { inline-size: 100%; block-size: 100%; object-fit: cover; }
+  .initials { font-weight: var(--weight-strong); letter-spacing: 0.02em; }
+  /* The name, for a reader, when the visible content is initials. */
+  .hidden {
+    position: absolute; inline-size: 1px; block-size: 1px;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+}

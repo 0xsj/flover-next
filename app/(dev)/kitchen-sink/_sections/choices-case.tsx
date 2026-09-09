@@ -9,40 +9,81 @@ import {
 import { Case, Row } from "../_components/section";
 import s from "../_components/sink.module.css";
 
-/** The choice controls. Client-side because every one of them is stateful, and
- *  their states are the point. */
-export function ChoicesCase() {
+/* One case per component — the rail is a catalog. The three that look alike get
+   the same closing paragraph so the distinction is visible from any of them,
+   rather than only from whichever one you happened to open. */
+
+const LOOKALIKES = (
+  <p className={s.limits}>
+    <strong>Checkbox, Switch and Toggle look alike and are three different
+    controls.</strong> A <em>checkbox</em> is a value you submit — nothing
+    happens until the form does. A <em>switch</em> is a setting that takes effect
+    immediately, so one inside a form with a Save button promises something the
+    form will not deliver. A <em>toggle</em> is a button that stays pressed and
+    changes the view rather than the data. Each announces itself differently, so
+    picking wrong tells a reader something untrue about what will happen.
+  </p>
+);
+
+export function ChoicesCases() {
   const [mixed, setMixed] = useState<boolean | "indeterminate">("indeterminate");
 
   return (
-    <Case
-      title="Choices"
-      note="checkbox · switch · toggle · radio · select — four roles, not one look"
-    >
-      <Row label="checkbox">
-        <span className={s.choice}><Checkbox id="c1" defaultChecked /><Label htmlFor="c1">Checked</Label></span>
-        <span className={s.choice}><Checkbox id="c2" /><Label htmlFor="c2">Unchecked</Label></span>
-        <span className={s.choice}>
-          <Checkbox id="c3" checked={mixed} onCheckedChange={setMixed} />
-          <Label htmlFor="c3">Indeterminate — a third state, not a styling</Label>
-        </span>
-        <span className={s.choice}><Checkbox id="c4" disabled defaultChecked /><Label htmlFor="c4">Disabled</Label></span>
-      </Row>
+    <>
+      <Case title="Checkbox" note="three states, and the third is not a styling of the other two">
+        <Row label="states">
+          <span className={s.choice}><Checkbox id="c1" defaultChecked /><Label htmlFor="c1">Checked</Label></span>
+          <span className={s.choice}><Checkbox id="c2" /><Label htmlFor="c2">Unchecked</Label></span>
+          <span className={s.choice}>
+            <Checkbox id="c3" checked={mixed} onCheckedChange={setMixed} />
+            <Label htmlFor="c3">Indeterminate</Label>
+          </span>
+          <span className={s.choice}><Checkbox id="c4" disabled defaultChecked /><Label htmlFor="c4">Disabled</Label></span>
+        </Row>
+        <p className={s.limits}>
+          Indeterminate reports <code>aria-checked=&quot;mixed&quot;</code> — a
+          real, announced third state. It is a <strong>state, not a variant</strong>:
+          a variant is chosen by the author, a state comes from the data. Both
+          glyphs live in the indicator and the state attribute decides which
+          shows. The label sits outside so the whole phrase is the hit target.
+        </p>
+        {LOOKALIKES}
+      </Case>
 
-      <Row label="switch">
-        <span className={s.choice}><Switch id="s1" defaultChecked /><Label htmlFor="s1">On</Label></span>
-        <span className={s.choice}><Switch id="s2" /><Label htmlFor="s2">Off</Label></span>
-        <span className={s.choice}><Switch id="s3" disabled /><Label htmlFor="s3">Disabled</Label></span>
-      </Row>
+      <Case title="Switch" note="a setting that takes effect when you flip it">
+        <Row label="states">
+          <span className={s.choice}><Switch id="s1" defaultChecked /><Label htmlFor="s1">On</Label></span>
+          <span className={s.choice}><Switch id="s2" /><Label htmlFor="s2">Off</Label></span>
+          <span className={s.choice}><Switch id="s3" disabled /><Label htmlFor="s3">Disabled</Label></span>
+        </Row>
+        <p className={s.limits}>
+          There is deliberately no loading state. A switch whose effect is
+          asynchronous will be flipped back by a failure, and a spinner in the
+          track does not explain that — make the surrounding region busy and let
+          the failure surface where failures surface. A control that silently
+          reverts is worse than one that never moved.
+        </p>
+        {LOOKALIKES}
+      </Case>
 
-      <Row label="toggle">
-        <Toggle aria-label="Bold" size="icon">B</Toggle>
-        <Toggle defaultPressed>Pressed</Toggle>
-        <Toggle shape="pill" size="sm">Filter</Toggle>
-        <Toggle disabled>Disabled</Toggle>
-      </Row>
+      <Case title="Toggle" note="a button that stays pressed">
+        <Row label="shapes">
+          <Toggle aria-label="Bold" size="icon">B</Toggle>
+          <Toggle defaultPressed>Pressed</Toggle>
+          <Toggle shape="pill" size="sm">Filter</Toggle>
+          <Toggle disabled>Disabled</Toggle>
+        </Row>
+        <p className={s.limits}>
+          It reports <code>aria-pressed</code>, which is what makes it a toggle
+          rather than a button that looks different when active. Pressed is a{" "}
+          <strong>state the control reports</strong>, not a class a caller sets —
+          the styling keys off the state attribute, so appearance and
+          announcement cannot drift.
+        </p>
+        {LOOKALIKES}
+      </Case>
 
-      <Row label="radio">
+      <Case title="Radio group" note="the group owns the value; the legend owns the question">
         <Fieldset legend="Notify me" hint="Arrows move within the group; Tab leaves it.">
           <RadioGroup defaultValue="email">
             <span className={s.choice}><Radio value="email" id="r1" /><Label htmlFor="r1">By email</Label></span>
@@ -50,9 +91,17 @@ export function ChoicesCase() {
             <span className={s.choice}><Radio value="none" id="r3" /><Label htmlFor="r3">Not at all</Label></span>
           </RadioGroup>
         </Fieldset>
-      </Row>
+        <p className={s.limits}>
+          One tab stop for the whole group, arrows within it — not one stop per
+          option. A hand-rolled group almost always gets this wrong in the same
+          direction, and a form with fifteen options then costs fifteen tab
+          presses to walk past. The question is a <code>&lt;legend&gt;</code>{" "}
+          rather than a prop here, because it has to be announced before{" "}
+          <em>every</em> option.
+        </p>
+      </Case>
 
-      <Row label="select">
+      <Case title="Select" note="a value bound to a form — not a menu">
         <div className={s.selectWidth}>
           <Field label="Region" hint="A value, not an action.">
             {(control) => (
@@ -67,31 +116,17 @@ export function ChoicesCase() {
             )}
           </Field>
         </div>
-      </Row>
-
-      <p className={s.limits}>
-        <strong>Three of these look alike and are three different controls.</strong>{" "}
-        A <em>checkbox</em> is a value you submit — nothing happens until the form
-        does. A <em>switch</em> is a setting that takes effect immediately, so one
-        inside a form with a Save button promises something the form will not
-        deliver. A <em>toggle</em> is a button that stays pressed and changes the
-        view rather than the data. Each announces itself differently, so picking
-        wrong tells a reader something untrue about what will happen.
-      </p>
-
-      <p className={s.limits}>
-        <strong>A select picks a value; a menu picks an action.</strong> They look
-        nearly identical and are announced completely differently — one as a
-        combobox with a current value, the other as a list of commands. A menu
-        used for a value leaves a reader unable to discover what is selected.
-      </p>
-
-      <p className={s.limits}>
-        <strong>Indeterminate is a state, not a variant.</strong> It reports{" "}
-        <code>aria-checked=&quot;mixed&quot;</code>. A variant is chosen by the
-        author; a state comes from the data — and it is one of the few controls
-        that can carry three states without inventing a widget.
-      </p>
-    </Case>
+        <p className={s.limits}>
+          <strong>A select picks a value; a menu picks an action.</strong> They
+          look nearly identical and are announced completely differently — one as
+          a combobox with a current value, the other as a list of commands. A
+          menu used for a value leaves a reader unable to discover what is
+          selected. The list is portalled so an <code>overflow: hidden</code>{" "}
+          ancestor cannot clip it, and the highlight follows{" "}
+          <code>data-highlighted</code> rather than <code>:hover</code>, which the
+          primitive sets for keyboard as well as pointer.
+        </p>
+      </Case>
+    </>
   );
 }

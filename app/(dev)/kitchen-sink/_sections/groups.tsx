@@ -7,17 +7,6 @@ import { PlannedSection, type Planned } from "../_components/planned";
  * not the one being made. Each entry names the component's JOB rather than its
  * markup, because the job is the part that survives being rebuilt. */
 
-const display: Planned[] = [
-  { name: "Panel", note: "a bounded region with a heading — the frame most screens are made of" },
-  { name: "Table", note: "rows, and the three states a cell can be in" },
-  { name: "Stat", note: "one number and its label; an unmeasured total renders as – and never 0" },
-  { name: "Badge", note: "a status. Never colour alone — a glyph or a word carries it too" },
-  { name: "Empty", note: "looked and found nothing, said in the product's own words" },
-  { name: "Presence", note: "the three-state renderer: found · none · never checked" },
-  { name: "Avatar", note: "a person, with a fallback that is not a broken image" },
-  { name: "Mock", note: "a visible mark that what is shown is not a record" },
-];
-
 const feedback: Planned[] = [
   { name: "Alert", note: "a message about the page, not about a field" },
   { name: "Skeleton", note: "the loading state, sized to what is coming" },
@@ -53,13 +42,6 @@ const chrome: Planned[] = [
   { name: "DensityToggle", note: "the token override, over lib/runtime" },
   { name: "Mark", note: "the wordmark, in one place" },
 ];
-
-export const DisplaySection = () => (
-  <PlannedSection
-    id="display" title="Display" components={display}
-    blurb="What a screen shows when it is not asking for anything. These are where the three-states rule is most often lost: a cell rendering an em-dash for both 'none' and 'never checked' has thrown the difference away at the moment it had it."
-  />
-);
 
 export const FeedbackSection = () => (
   <PlannedSection

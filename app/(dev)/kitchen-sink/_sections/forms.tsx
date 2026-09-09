@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button, Field, Fieldset, Input, Textarea } from "@/components/forms";
 import { Plus, Trash2 } from "@/components/utility";
 import { Case, Row, Section } from "../_components/section";
-import { ChoicesCase } from "./choices-case";
+import { ChoicesCases } from "./choices-case";
 import { readSources } from "../_lib/source";
 import s from "../_components/sink.module.css";
 
@@ -170,7 +170,7 @@ export async function FormsSection() {
         </p>
       </Case>
 
-      <ChoicesCase />
+      <ChoicesCases />
 
       <p className={s.limits}>
         Rendering a <em>failure</em> in a form — per-field messages from a

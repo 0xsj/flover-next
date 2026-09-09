@@ -1,0 +1,18 @@
+@layer primitive {
+  .stat { display: grid; gap: var(--space-2); }
+  .label {
+    font-size: var(--text-10);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--ink-4);
+  }
+  .value {
+    font-size: var(--text-22);
+    font-weight: var(--weight-bold);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: var(--tracking-tight);
+    color: var(--ink);
+  }
+  .unmeasured { color: var(--ink-4); font-weight: var(--weight-regular); }
+  .hint { font-size: var(--text-11); color: var(--ink-4); }
+}

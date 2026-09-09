@@ -1,8 +1,9 @@
 import type { ComponentType } from "react";
 import { FormsSection } from "./forms";
 import { DataSection } from "./data";
+import { DisplaySection } from "./display";
 import {
-  ChromeSection, DisplaySection, FeedbackSection, LayoutSection,
+  ChromeSection, FeedbackSection, LayoutSection,
   NavigationSection, OverlaysSection, UtilitySection,
 } from "./groups";
 import { TokensSection } from "./tokens";

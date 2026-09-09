@@ -1,0 +1,20 @@
+@layer primitive {
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 1px var(--space-4);
+    border-radius: var(--radius-pill);
+    border: 1px solid;
+    font-size: var(--text-11);
+    font-weight: var(--weight-medium);
+    white-space: nowrap;
+  }
+  .glyph { font-size: var(--text-9); }
+
+  .neutral { color: var(--ink-3); background: var(--surface-hover); border-color: var(--line); }
+  .accent  { color: var(--accent); background: var(--accent-tint); border-color: var(--accent-line); }
+  .warn    { color: var(--warn); background: var(--warn-tint); border-color: var(--warn-line); }
+  .crit    { color: var(--crit); background: var(--crit-tint); border-color: var(--crit-line); }
+  .info    { color: var(--info); background: var(--info-tint); border-color: var(--info-line); }
+}

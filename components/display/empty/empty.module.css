@@ -1,0 +1,13 @@
+@layer primitive {
+  .empty {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: center;
+    text-align: center;
+    padding: var(--space-9) var(--space-7);
+    color: var(--ink-3);
+  }
+  .title { font-size: var(--text-13); color: var(--ink-2); }
+  .body { font-size: var(--text-12); line-height: var(--leading-body); max-inline-size: 44ch; }
+  .action { margin-block-start: var(--space-2); }
+}
