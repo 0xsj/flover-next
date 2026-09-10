@@ -1,13 +1,19 @@
 @layer primitive {
   /* Wide content scrolls inside its own box rather than the page. */
   .scroll { overflow-x: auto; }
+  .foot { border-block-start: 1px solid var(--line-strong); font-weight: var(--weight-bold); }
+  .row[data-selected] .td { background: var(--accent-tint); }
+  .row[data-selected] .th[scope="row"] { background: var(--accent-tint); }
+  .sort { display: inline-flex; align-items: center; gap: var(--space-3); min-block-size: var(--control-sm); color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; border-radius: var(--radius-1); }
+  .sort:hover { color: var(--ink); }
+  .th[aria-sort="ascending"], .th[aria-sort="descending"] { color: var(--ink); }
 
   .table { inline-size: 100%; border-collapse: collapse; font-size: var(--text-12-5); }
 
   .caption {
     caption-side: top;
     text-align: start;
-    padding-block-end: var(--space-4);
+    padding: var(--space-4) var(--space-5);
     font-size: var(--text-11);
     color: var(--ink-4);
   }
@@ -34,6 +40,9 @@
 
   .row:last-child .td { border-block-end: none; }
   .row:hover .td { background: var(--surface-hover); }
+  .row .th[scope="row"] { font-size: var(--text-12-5); font-weight: var(--weight-medium); color: var(--ink); text-transform: none; letter-spacing: normal; border-block-end: 1px solid var(--line); }
+  .row:last-child .th[scope="row"] { border-block-end: none; }
+  .row:hover .th[scope="row"] { background: var(--surface-hover); }
 
   /* Numbers align on their digits and use tabular figures, so a column of them
      can be compared by eye without reading each one. */

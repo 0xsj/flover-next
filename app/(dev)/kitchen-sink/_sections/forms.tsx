@@ -5,6 +5,7 @@ import { Case, Row, Section } from "../_components/section";
 import { ChoicesCases } from "./choices-case";
 import { readSources } from "../_lib/source";
 import s from "../_components/sink.module.css";
+import { SliderCase } from "./additional-controls";
 
 /* One case per COMPONENT, not per variant. The rail is derived from the cases,
    so a case named "Intents" puts a variant in the menu where the component
@@ -171,11 +172,12 @@ export async function FormsSection() {
       </Case>
 
       <ChoicesCases />
+      <SliderCase />
 
       <p className={s.limits}>
         Rendering a <em>failure</em> in a form — per-field messages from a
-        refused write — is under <a href="#data" className={s.anchor}>Data and
-        failures</a>, with the rest of the cases where the transport tier&rsquo;s
+        refused write — is under <Link href="/kitchen-sink/data" className={s.anchor}>Data and
+        failures</Link>, with the rest of the cases where the transport tier&rsquo;s
         vocabulary meets a component.
       </p>
     </Section>

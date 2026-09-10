@@ -1,0 +1,3 @@
+@layer primitive {
+  .label { margin: 0; font-family: var(--font-mono); font-size: var(--text-10); font-weight: var(--weight-medium); line-height: var(--leading-snug); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--ink-3); }
+}

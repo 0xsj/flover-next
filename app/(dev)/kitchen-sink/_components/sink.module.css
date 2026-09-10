@@ -14,9 +14,9 @@
   .headerInner {
     display: flex;
     align-items: center;
-    gap: var(--space-7);
-    padding: var(--space-5) var(--space-8);
-    max-inline-size: var(--page-max);
+    gap: var(--space-5);
+    padding: var(--space-4) var(--space-6);
+    min-block-size: 64px;
   }
 
   .nav { display: flex; gap: var(--space-2); flex-wrap: wrap; }
@@ -30,26 +30,38 @@
 
   .navLink:hover { background: var(--surface-hover); color: var(--ink); }
 
-  .controls { margin-inline-start: auto; }
+  .controls { margin-inline-start: auto; display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; justify-content: flex-end; }
+  .headerLabel { color: var(--ink-4); font-size: var(--text-11-5); }
+  .skipLink { position: fixed; inset-block-start: -100px; inset-inline-start: var(--space-6); z-index: var(--z-palette); padding: var(--space-4); background: var(--surface-panel); color: var(--ink); }
+  .skipLink:focus { inset-block-start: var(--space-4); }
 
   /* ── rail ───────────────────────────────────────────────────────────── */
 
   .body {
     display: grid;
-    grid-template-columns: 232px minmax(0, 1fr);
+    grid-template-columns: 210px minmax(0, 1fr) 190px;
+    grid-template-areas: "nav main toc";
     align-items: start;
   }
 
   .rail {
+    grid-area: nav;
     position: sticky;
-    inset-block-start: 56px;
-    max-block-size: calc(100dvh - 56px);
+    inset-block-start: 64px;
+    max-block-size: calc(100dvh - 64px);
     overflow-y: auto;
-    padding: var(--space-7) var(--space-5) var(--space-10);
+    padding: var(--space-5) var(--space-4) var(--space-8);
     border-inline-end: 1px solid var(--line);
   }
 
-  .caseNav { display: flex; flex-direction: column; gap: var(--space-6); }
+  .contentsRail { grid-area: toc; position: sticky; inset-block-start: 64px; max-block-size: calc(100dvh - 64px); overflow-y: auto; padding: var(--space-8) var(--space-4); }
+  .caseNav { display: flex; flex-direction: column; gap: var(--space-2); }
+  .catalogNav { display: grid; gap: var(--space-5); }
+  .catalogGroup { display: grid; gap: 1px; }
+  .catalogLink { display: block; padding: var(--space-2) var(--space-4); color: var(--ink-3); font-size: var(--text-12); border-radius: var(--radius-1); border-inline-start: 2px solid transparent; }
+  .catalogLink:hover { color: var(--ink); background: var(--surface-hover); }
+  .catalogActive { color: var(--ink); background: var(--accent-tint); border-inline-start-color: var(--accent); }
+  .mobileNavToggle { display: none; }
   .caseGroup { display: flex; flex-direction: column; gap: 1px; }
 
   .caseSection {
@@ -81,15 +93,37 @@
     background: var(--surface-hover);
   }
 
-  @media (max-width: 900px) {
-    .body { grid-template-columns: minmax(0, 1fr); }
-    .rail { display: none; }
+  @media (max-width: 1200px) {
+    .body { grid-template-columns: 200px minmax(0, 1fr); grid-template-areas: "nav toc" "nav main"; }
+    .contentsRail { position: static; padding: var(--space-5) var(--space-7) 0; max-block-size: none; }
+    .contentsRail:has(> :empty), .contentsRail:not(:has(nav)) { display: none; }
+    .caseNav { flex-direction: row; flex-wrap: wrap; gap: var(--space-2); }
+    .caseNav .caseSection { inline-size: 100%; }
+  }
+  @media (max-width: 760px) {
+    .body { grid-template-columns: minmax(0, 1fr); grid-template-areas: "nav" "toc" "main"; }
+    .rail { position: static; max-block-size: none; border-inline-end: 0; border-block-end: 1px solid var(--line); padding: var(--space-4) var(--space-5); }
+    .mobileNavToggle { display: inline-flex; }
+    .catalogNav { display: none; padding-block-start: var(--space-5); }
+    .catalogNav[data-open] { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .catalogNav > a { grid-column: 1 / -1; }
+    .catalogGroup { align-content: start; }
+    .headerLabel { display: none; }
+    .headerInner { padding-inline: var(--space-5); }
+    .contentsRail { padding-inline: var(--space-5); }
   }
 
   /* ── page body ──────────────────────────────────────────────────────── */
 
-  .main { padding: var(--space-9) var(--space-8) var(--space-12); max-inline-size: var(--page-max); }
-  .intro { margin-block-end: var(--space-10); display: grid; gap: var(--space-4); }
+  .main { grid-area: main; min-inline-size: 0; padding: var(--space-9) var(--space-8) var(--space-12); max-inline-size: var(--page-max); }
+  .main:focus { outline: none; }
+  @media (max-width: 760px) { .main { padding: var(--space-7) var(--space-5) var(--space-10); } }
+  .catalogOverviewGroup { display: grid; gap: var(--space-6); }
+  .catalogCards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: var(--space-5); }
+  .catalogCard { display: grid; align-content: start; gap: var(--space-4); border: 1px solid var(--line); border-radius: var(--radius-3); background: var(--surface-panel); padding: var(--space-6); transition: border-color var(--dur-1) var(--ease), background var(--dur-1) var(--ease); }
+  .catalogCard:hover { border-color: var(--line-strong); background: var(--surface-hover); }
+  .catalogCardTitle { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); font-size: var(--text-13); font-weight: var(--weight-strong); color: var(--ink); }
+  .intro { display: grid; gap: var(--space-4); }
   .introTitle {
     font-size: var(--text-30);
     font-weight: var(--weight-bold);
@@ -97,11 +131,11 @@
     color: var(--ink);
   }
   .introText { font-size: var(--text-13); line-height: var(--leading-body); color: var(--ink-3); max-inline-size: var(--measure); }
-  .sections { display: grid; gap: var(--space-11); }
+  .sections { display: grid; gap: var(--space-10); }
 
   .section { display: grid; gap: var(--space-5); }
   .sectionTitle {
-    font-size: var(--text-22);
+    font-size: var(--text-30);
     font-weight: var(--weight-bold);
     letter-spacing: var(--tracking-tight);
     color: var(--ink);
@@ -116,6 +150,10 @@
   .panel { scroll-margin-block-start: 72px; }
 
   .row { display: flex; align-items: center; gap: var(--space-5); flex-wrap: wrap; }
+  .controlExample { display: grid; gap: var(--space-5); max-inline-size: 420px; inline-size: 100%; }
+  .shellPreview { inline-size: 100%; block-size: 540px; border: 1px solid var(--line); border-radius: var(--radius-2); background: var(--surface-ground); }
+  .chartGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: var(--space-6); }
+  .chartGrid > * { min-inline-size: 0; }
   .rowLabel {
     min-inline-size: 110px;
     font-family: var(--font-mono);
@@ -364,36 +402,6 @@
   }
 
   .choice { display: flex; align-items: center; gap: var(--space-4); font-size: var(--text-12-5); color: var(--ink-2); }
-
-  /* ── an unbuilt group ───────────────────────────────────────────────── */
-
-  .planned {
-    border: 1px dashed var(--line-strong);
-    border-radius: var(--radius-3);
-    padding: var(--space-6);
-    background: var(--surface-panel-2);
-  }
-  .plannedHead { margin-block-end: var(--space-5); }
-  .plannedCount {
-    font-family: var(--font-mono);
-    font-size: var(--text-10);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--ink-4);
-  }
-  .plannedList { display: grid; gap: var(--space-3); list-style: none; margin: 0; padding: 0; }
-  .plannedItem {
-    display: grid;
-    grid-template-columns: 148px minmax(0, 1fr);
-    gap: var(--space-5);
-    align-items: baseline;
-    padding-block-end: var(--space-3);
-    border-block-end: 1px solid var(--line);
-  }
-  .plannedItem:last-child { border-block-end: none; }
-  .plannedName { font-size: var(--text-12-5); color: var(--ink-4); }
-  .plannedItem[data-built] .plannedName { color: var(--accent); }
-  .plannedNote { font-size: var(--text-11-5); line-height: var(--leading-snug); color: var(--ink-4); }
 
   .selectWidth { inline-size: 240px; }
 

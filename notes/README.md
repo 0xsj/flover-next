@@ -43,6 +43,8 @@ do not recognise are the ones to open.
 | | |
 | --- | --- |
 | [a-flex-child-will-not-shrink](language/a-flex-child-will-not-shrink.md) | A flex item's `min-width` computes to `auto`, not `0`, so an item refuses to narrow below its own content and overflows the row it is in. |
+| [a-responsive-plot-can-shrink-its-meaning](techniques/a-responsive-plot-can-shrink-its-meaning.md) | A responsive SVG can preserve every data point while shrinking the labels that explain them below a readable size. |
+| [a-layout-bound-is-not-a-viewport](techniques/a-layout-bound-is-not-a-viewport.md) | A layout's requested bounds do not guarantee that its finished picture fits the viewport, especially when labels and annotations are added after layout. |
 | [css-var-with-no-fallback](language/css-var-with-no-fallback.md) | An undefined `var()` with no fallback does not fall through to the rest of the declaration — it invalidates the whole custom property. |
 | [fieldset-does-not-shrink](language/fieldset-does-not-shrink.md) | `<fieldset>` carries a user-agent `min-inline-size: min-content` that no other element has, so one inside a flex or grid container will not shrink below its widest child and pushes the whole layout open. |
 | [no-question-mark-operator](language/no-question-mark-operator.md) | Porting an errors-as-values design into TypeScript costs exactly one thing: there is no propagation operator, so dependent sequencing stays an explicit early return forever. |

@@ -1,9 +1,8 @@
 import {
   Avatar, Badge, Empty, Mock, Panel, Presence, Stat,
-  Table, TBody, Td, Th, THead, Tr,
+  DescriptionList, DescriptionItem,
 } from "@/components/display";
 import { Button } from "@/components/forms";
-import type { Presence as PresenceValue } from "@/lib/kernel";
 import { Case, Row, Section } from "../_components/section";
 import s from "../_components/sink.module.css";
 
@@ -11,23 +10,6 @@ import s from "../_components/sink.module.css";
    be found by its own name. Two components share a case only where neither can
    be shown without the other. */
 
-type CellRow = {
-  name: string;
-  owner: string;
-  findings: number | undefined;
-  server: PresenceValue<string>;
-};
-
-/* Every row is a different combination of the three states, deliberately: it is
-   the only way to see that they stay distinguishable. */
-const rows: CellRow[] = [
-  { name: "api.example.com", owner: "Ada Lovelace", findings: 3,
-    server: { state: "found", value: "nginx/1.24" } },
-  { name: "www.example.com", owner: "Grace Hopper", findings: 0,
-    server: { state: "empty" } },
-  { name: "old.example.com", owner: "Alan Turing", findings: undefined,
-    server: { state: "unmeasured", failure: { kind: "timeout", message: "Timed out." } } },
-];
 
 export function DisplaySection() {
   return (
@@ -49,38 +31,13 @@ export function DisplaySection() {
         </p>
       </Case>
 
-      <Case title="Table" note="compositional, and every row here is a different combination of states">
-        <Panel title="Targets" actions={<Mock />} flush>
-          <Table caption="Every row is a different combination of the three states.">
-            <THead>
-              <Tr><Th>Host</Th><Th>Owner</Th><Th numeric>Findings</Th><Th>Server</Th></Tr>
-            </THead>
-            <TBody>
-              {rows.map((r) => (
-                <Tr key={r.name}>
-                  <Td>{r.name}</Td>
-                  <Td>
-                    <span className={s.choice}><Avatar name={r.owner} size="sm" />{r.owner}</span>
-                  </Td>
-                  <Td numeric>
-                    {r.findings === undefined
-                      ? <Presence of={{ state: "unmeasured", failure: { kind: "internal", message: "never counted" } }}>{(v: number) => v}</Presence>
-                      : r.findings}
-                  </Td>
-                  <Td><Presence of={r.server}>{(v) => <span>{v}</span>}</Presence></Td>
-                </Tr>
-              ))}
-            </TBody>
-          </Table>
-        </Panel>
-        <p className={s.limits}>
-          Row two has <strong>zero</strong> findings; row three has{" "}
-          <strong>none recorded</strong>. One is a measurement, the other is the
-          absence of one. Same in the Server column: <code>none</code> means a
-          source was asked and said nothing, <code>–</code> means nobody asked.
-          A cell holding a <code>Presence</code> is why this is compositional
-          rather than taking <code>columns</code> and <code>rows</code>.
-        </p>
+      <Case title="Description list" note="structured label-value pairs, with any component as a value">
+        <DescriptionList>
+          <DescriptionItem term="Workspace">Northstar</DescriptionItem>
+          <DescriptionItem term="Owner"><span className={s.choice}><Avatar name="Ada Lovelace" size="sm" />Ada Lovelace</span></DescriptionItem>
+          <DescriptionItem term="Status"><Badge glyph="●" tone="accent">Active</Badge></DescriptionItem>
+          <DescriptionItem term="Description">A shared space for projects and their collaborators. Longer values wrap and stack below the label on narrow screens.</DescriptionItem>
+        </DescriptionList>
       </Case>
 
       <Case title="Stat" note="undefined renders as – and never as 0">

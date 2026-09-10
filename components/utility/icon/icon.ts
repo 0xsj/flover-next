@@ -8,13 +8,23 @@ export type { LucideIcon, LucideProps } from "lucide-react";
  *
  * Alphabetical, so a duplicate is obvious and the diff is a single line. */
 export {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  ArrowUpRight,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   History,
   LayoutGrid,
   LoaderCircle,
   LogOut,
+  Menu,
   Minus,
+  Network,
+  PanelLeftClose,
+  PanelLeftOpen,
   Plus,
   Settings,
   Sparkles,

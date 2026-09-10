@@ -1,0 +1,7 @@
+@layer primitive {
+  .heading { margin: 0; color: var(--ink); font-weight: var(--weight-bold); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); overflow-wrap: anywhere; }
+  .sm { font-size: var(--text-15); }
+  .md { font-size: var(--text-22); }
+  .lg { font-size: var(--text-30); }
+  .xl { font-size: var(--text-42); }
+}

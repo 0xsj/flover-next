@@ -5,6 +5,7 @@ import { Box, Flex } from "@/components/layout";
 import { Case, Row, Section } from "../_components/section";
 import { DismissibleAlert } from "./dismissible-alert";
 import s from "../_components/sink.module.css";
+import { ProgressCase } from "./additional-controls";
 
 export function FeedbackSection() {
   return (
@@ -102,6 +103,7 @@ export function FeedbackSection() {
           legible has put its message in the one channel some people switched off.
         </p>
       </Case>
+      <ProgressCase />
     </Section>
   );
 }

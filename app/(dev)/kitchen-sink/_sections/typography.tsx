@@ -75,7 +75,7 @@ export function TypographySection() {
   return (
     <Section
       id="typography"
-      title="Typography"
+      title="Type scale"
       blurb="The family tokens are a contract the font loader satisfies, not a font name — typography.css asks for --font-sans-src and never learns which family answered. Swapping the family is one line in the root layout."
     >
       <Case title="Stacks" note="resolved, then checked against what actually loaded">

@@ -1,4 +1,4 @@
-import type { ReactNode, TdHTMLAttributes, ThHTMLAttributes } from "react";
+import type { HTMLAttributes, TableHTMLAttributes, TdHTMLAttributes, ThHTMLAttributes } from "react";
 import { cn } from "@/lib/kernel";
 import s from "./table.module.css";
 
@@ -9,12 +9,12 @@ import s from "./table.module.css";
  * platform already has. Composition costs a few more lines at the call site and
  * never runs out. */
 
-export type TableProps = { caption?: string; className?: string; children: ReactNode };
+export type TableProps = TableHTMLAttributes<HTMLTableElement> & { caption?: string; scrollLabel?: string };
 
-export function Table({ caption, className, children }: TableProps) {
+export function Table({ caption, scrollLabel, className, children, ...props }: TableProps) {
   return (
-    <div className={s.scroll}>
-      <table className={cn(s.table, className)}>
+    <div className={s.scroll} tabIndex={0} role="region" aria-label={scrollLabel ?? caption ?? "Scrollable table"}>
+      <table className={cn(s.table, className)} {...props}>
         {/* Named for a reader even when the heading above it is visible: a
             table reached by jumping between tables has no surrounding context. */}
         {caption ? <caption className={s.caption}>{caption}</caption> : null}
@@ -24,11 +24,12 @@ export function Table({ caption, className, children }: TableProps) {
   );
 }
 
-export const THead = ({ children }: { children: ReactNode }) => (
-  <thead className={s.head}>{children}</thead>
+export const THead = ({ className, ...props }: HTMLAttributes<HTMLTableSectionElement>) => (
+  <thead className={cn(s.head, className)} {...props} />
 );
-export const TBody = ({ children }: { children: ReactNode }) => <tbody>{children}</tbody>;
-export const Tr = ({ children }: { children: ReactNode }) => <tr className={s.row}>{children}</tr>;
+export const TBody = (props: HTMLAttributes<HTMLTableSectionElement>) => <tbody {...props} />;
+export const TFoot = ({ className, ...props }: HTMLAttributes<HTMLTableSectionElement>) => <tfoot className={cn(s.foot, className)} {...props} />;
+export const Tr = ({ className, ...props }: HTMLAttributes<HTMLTableRowElement>) => <tr className={cn(s.row, className)} {...props} />;
 
 export type ThProps = ThHTMLAttributes<HTMLTableCellElement> & { numeric?: boolean };
 

@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { DensityToggle, ThemeToggle } from "@/components/chrome";
-import { Button, Field, Input } from "@/components/forms";
 import { LayoutGrid, Settings, Sparkles } from "@/components/utility";
-import { AppShell, AuthShell, SidebarNav, type NavGroup } from "@/components/shells";
+import { SidebarNav, type NavGroup } from "@/components/shells";
 import { Case, Row, Section } from "../_components/section";
 import s from "../_components/sink.module.css";
+import { ShellExample } from "../_components/shell-preview";
 
 const groups: NavGroup[] = [
   { items: [{ href: "/app", label: "Overview", icon: LayoutGrid }] },
@@ -22,18 +21,10 @@ export function ShellsSection() {
     <Section
       id="shells"
       title="Shells"
-      blurb="The first group that frames a whole page rather than answering what a control is — which means a shell that gets something wrong is wrong on every screen at once. Each one is shown clipped inside a stage here; the live versions are the routes they name."
+      blurb="The first group that frames a whole page rather than answering what a control is — which means a shell that gets something wrong is wrong on every screen at once. The two application layouts and the authentication frame are shown in isolated previews, each with its own document and main landmark."
     >
       <Case title="AppShell" note="header, rail, main — and no opinion about what goes in them">
-        <div className={s.shellStage}>
-          <AppShell
-            className={s.shellFill}
-            nav={<SidebarNav groups={groups} current="/app" label="Application" />}
-            actions={<><ThemeToggle /><DensityToggle /><Button intent="ghost" size="sm">Ada Lovelace</Button></>}
-          >
-            <p className={s.limits}>The screen goes here.</p>
-          </AppShell>
-        </div>
+        <ShellExample variant="standard" title="Standard application shell preview" />
 
         <p className={s.limits}>
           <code>nav</code>, <code>actions</code> and <code>brand</code> are{" "}
@@ -58,21 +49,13 @@ export function ShellsSection() {
         </p>
       </Case>
 
+      <Case title="RailShell" note="section rail, contextual sidebar, header, and independently scrolling content">
+        <ShellExample variant="rail" title="Rail application shell preview" />
+        <p className={s.limits}>The icon rail stays available when the contextual sidebar is collapsed. At narrow widths, the sidebar opens below the header. NavigationRail, RailLink, and ContextSidebar can also be composed independently.</p>
+      </Case>
+
       <Case title="AuthShell" note="one column, one card, and a required heading">
-        <div className={s.shellStage}>
-          <AuthShell
-            className={s.shellFill}
-            title="Sign in"
-            description="No server is configured, so this runs against the in-memory adapter."
-            footer={<>New here? Create an account</>}
-          >
-            <div className={s.fieldList}>
-              <Field label="Email">{(c) => <Input {...c} type="email" />}</Field>
-              <Field label="Password">{(c) => <Input {...c} type="password" />}</Field>
-              <Button intent="primary" size="lg" className={s.fullWidth}>Sign in</Button>
-            </div>
-          </AuthShell>
-        </div>
+        <ShellExample variant="auth" title="Authentication shell preview" />
         <p className={s.limits}>
           <code>title</code> is required and is rendered as the page&rsquo;s{" "}
           <code>h1</code>. A sign-in page whose only heading is a wordmark gives

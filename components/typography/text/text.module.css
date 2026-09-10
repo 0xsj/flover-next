@@ -1,0 +1,16 @@
+@layer primitive {
+  .text { margin: 0; line-height: var(--leading-body); }
+  .sm { font-size: var(--text-11-5); }
+  .md { font-size: var(--text-13); }
+  .lg { font-size: var(--text-15); }
+  .default { color: var(--ink); }
+  .muted { color: var(--ink-2); }
+  .quiet { color: var(--ink-3); }
+  .accent { color: var(--accent); }
+  .danger { color: var(--crit); }
+  .regular { font-weight: var(--weight-regular); }
+  .medium { font-weight: var(--weight-medium); }
+  .strong { font-weight: var(--weight-bold); }
+  .measure { max-inline-size: var(--measure); }
+  .truncate { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+}

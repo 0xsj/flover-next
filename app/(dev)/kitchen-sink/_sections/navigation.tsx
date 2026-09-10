@@ -6,6 +6,7 @@ import { Badge } from "@/components/display";
 import { Box, Flex } from "@/components/layout";
 import { Case, Row, Section } from "../_components/section";
 import s from "../_components/sink.module.css";
+import { PaginationCase } from "./additional-controls";
 
 export function NavigationSection() {
   return (
@@ -100,6 +101,7 @@ export function NavigationSection() {
           presses to walk past.
         </p>
       </Case>
+      <PaginationCase />
     </Section>
   );
 }

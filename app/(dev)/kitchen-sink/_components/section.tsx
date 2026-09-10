@@ -12,7 +12,7 @@ export function Section({ id, title, blurb, children }: {
 }) {
   return (
     <section id={id} data-section={title} className={s.section}>
-      <h2 className={s.sectionTitle}>{title}</h2>
+      <h1 className={s.sectionTitle}>{title}</h1>
       {blurb ? <p className={s.sectionBlurb}>{blurb}</p> : null}
       <div className={s.sectionBody}>{children}</div>
     </section>
@@ -38,9 +38,9 @@ export function Case({ title, note, children, sources }: {
   return (
     <div id={id} data-case={title} className={s.panel}>
       <div className={s.panelHead}>
-        <h3 className={s.panelTitle}>
+        <h2 className={s.panelTitle}>
           <a href={`#${id}`} className={s.anchor}>{title}</a>
-        </h3>
+        </h2>
         {note ? <span className={s.panelNote}>{note}</span> : null}
       </div>
       <div className={s.panelBody}>{children}</div>
