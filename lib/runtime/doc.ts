@@ -53,5 +53,13 @@
  *
  * Beginning one is an event handler's job, never a hook's, because a render is
  * not a user action.
+ *
+ * # Documents are observed, not turned into preferences
+ *
+ * `useStoredDocument` exposes loading followed by the storage Result, including
+ * missing and failed reads. The framework-free document store caches snapshots
+ * and connects after mount. Consumers keep their unsaved drafts separately;
+ * an external storage notification must not erase an edit. Unlike theme/density,
+ * an explicitly saved layout needs visible write failure and reset behavior.
  */
 export {};

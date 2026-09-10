@@ -4,7 +4,8 @@ import { AppError, type Presence, type TransportFailure } from "@/lib/kernel";
 import { createRoot, DOMAINS, type Domain, type Root } from "@/lib/root";
 import { ledgerRoutes } from "@/lib/services/ledger";
 import { currentUser, sessionRoutes, type User } from "@/lib/services/session";
-import { requestChaos } from "./request";
+import { requestChaos, requestReturnTo } from "./request";
+import { authHref } from "./return-to";
 import { readSessionToken } from "./session";
 
 /* Where the request meets the composition root.
@@ -121,7 +122,7 @@ export const currentSession = cache(
 export const requireUser = cache(async (): Promise<User> => {
   const session = await currentSession();
   if (session.state === "found") return session.value;
-  if (session.state === "empty") redirect("/sign-in");
+  if (session.state === "empty") redirect(authHref("/sign-in", await requestReturnTo()));
   throw new AppError(session.failure);
 });
 

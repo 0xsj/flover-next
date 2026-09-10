@@ -55,5 +55,15 @@
  *
  * **Prefetching and hydration.** A real concern in this framework and a
  * premature one here; both are additive and neither changes anything above.
+ *
+ * # Live events invalidate data, not component identity
+ *
+ * `useLiveQueries` binds a portable EventSource to caller-selected key prefixes.
+ * Events in one short window coalesce; connection open resyncs declared keys
+ * because notifications could have been missed. `LiveQueryBridge` mounts the
+ * same behavior without a status UI. Source, mapping, and resync list identities
+ * define the subscription lifetime; pass stable values. Cleanup cancels pending
+ * invalidation timers and unsubscribes. Query failure and connection state are
+ * separate: the consumer can retain last successful data through either failure.
  */
 export {};

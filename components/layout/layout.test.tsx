@@ -17,8 +17,9 @@ describe("space props resolve to tokens, never to numbers", () => {
   });
 
   it("an absent prop emits nothing at all", () => {
-    const style = spaceStyle({});
-    expect(Object.values(style).every((v) => v === undefined)).toBe(true);
+    expect(spaceStyle({})).toEqual({});
+    expect(spaceStyle({ gap: 4 })).toEqual({ gap: "var(--space-4)" });
+    expect(spaceStyle({ p: 3, px: 5 })).toEqual({ padding: "var(--space-3)", paddingInline: "var(--space-5)" });
   });
 
   it("edges are LOGICAL, so they follow the text direction", () => {

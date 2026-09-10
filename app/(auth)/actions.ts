@@ -5,6 +5,7 @@ import { signIn, signUp } from "@/lib/services/session";
 import { serverRoot } from "@/app/_lib/root";
 import { startSession } from "@/app/_lib/session";
 import { toFormState, type FormState } from "@/app/_lib/form-state";
+import { safeReturnTo } from "@/app/_lib/return-to";
 
 /* The boundary. A `Result` never crosses it — `boundaries.test.ts` fails the
  * build for a "use server" file that returns one — so every path here ends in
@@ -35,7 +36,7 @@ export async function signInAction(_prev: FormState, form: FormData): Promise<Fo
   if (!session.ok) return toFormState(session.error, { values: { email } });
 
   await startSession(session.value.token);
-  redirect("/app");
+  redirect(safeReturnTo(form.get("returnTo")));
 }
 
 export async function signUpAction(_prev: FormState, form: FormData): Promise<FormState> {
@@ -59,5 +60,5 @@ export async function signUpAction(_prev: FormState, form: FormData): Promise<Fo
   }
 
   await startSession(session.value.token);
-  redirect("/app");
+  redirect(safeReturnTo(form.get("returnTo")));
 }

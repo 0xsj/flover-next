@@ -19,6 +19,7 @@ export const CATALOG = [
   { id: "networks", label: "Network diagrams", group: "Compositions", description: "Eleven graph presets: force, radial, circular, flow, and more." },
   { id: "patterns", label: "Page patterns", group: "Compositions", description: "Page headers, collection toolbars, and common screen recipes." },
   { id: "shells", label: "Shells", group: "Compositions", description: "Standard and rail layouts, contextual sidebars, and authentication frames." },
+  { id: "workspaces", label: "Interactive workspaces", group: "Compositions", description: "Freeform canvases and editable dashboard grids, with keyboard alternatives." },
   { id: "chrome", label: "Preferences", group: "Runtime", description: "Theme, density, and application identity." },
   { id: "data", label: "Data & failures", group: "Runtime", description: "The port, fixtures, cached reads, and failure presentation." },
 ] as const;

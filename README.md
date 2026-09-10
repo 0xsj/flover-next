@@ -13,8 +13,28 @@ npm ci
 npm run dev
 ```
 
-Open [the kitchen sink](http://localhost:3000/kitchen-sink) to explore the design
-system. The landing page and fixture-backed application are at `/` and `/app`.
+Open [the cookbook](http://localhost:3000/cookbook) for the working examples;
+`/` redirects there. [Your app](http://localhost:3000/app) is a fresh, authenticated
+canvas using the same rail shell. The [kitchen sink](http://localhost:3000/kitchen-sink)
+remains the component catalog.
+
+## App and cookbook
+
+The rail switches between the app, cookbook, and component catalog. The app and
+cookbook share their frame and preferences; their contextual navigation and page
+content differ. The cookbook index is public. Its Dashboard, Activity, Chaos,
+and Failures recipes use the existing session guard and fixture-backed services.
+Editable dashboard, Canvas, and Live updates add interactive workspace recipes
+under the same guard. The dashboard saves per-account layouts in this browser;
+the canvas edits last for the current visit; live events use a labelled simulation.
+Sign-in and sign-up return to the requested local page, preserving its query.
+
+Routes live under `app/(workspace)/`: `app/` is the product canvas, and
+`cookbook/` owns the examples. The shared navigation metadata is in `_lib/navigation.ts`.
+Start product work in `app/(workspace)/app/page.tsx`; it imports no cookbook
+implementation. Add recipes under `cookbook/(recipes)/` and register their
+destinations in the navigation metadata. Old `/app/activity`, `/app/chaos`, and
+`/app/failures` links redirect to their cookbook counterparts with queries intact.
 
 ## Component catalog
 
@@ -38,6 +58,7 @@ Theme and density controls apply to the whole catalog.
 | Statistical charts | PlotFrame, Volcano, BubblePlot, RankedBar, Matrix, Legend, ColourBar, NothingKey |
 | Network diagrams | GraphFrame and 11 layout/encoding presets |
 | Patterns and shells | PageHeader, CollectionToolbar, AppShell, RailShell, AuthShell, NavigationRail, RailLink, ContextSidebar, SidebarNav |
+| Interactive workspaces | Canvas, DashboardGrid, validated grid geometry and keyboard arrange actions |
 | Utility and preferences | Icons, accessible text, portals, theme and density controls |
 
 The [table examples](http://localhost:3000/kitchen-sink/tables) compose filtering,
@@ -84,12 +105,48 @@ This covers the common application foundation. File-upload workflows,
 notifications, virtualized grids, and advanced chart
 interactions remain product-driven additions.
 
+## Browser documents and live data
+
+[`lib/storage`](lib/storage/doc.ts) provides a string-storage port with browser
+and memory adapters. Register a document key, version, and decoder from `unknown`
+with `createDocument`; reads distinguish missing data from corrupt, blocked, or
+unsupported data. Writes and deletes return the existing `Result`/`Failure`
+types. Migrations run in memory, and saving is explicit. There is no origin-wide
+clear, silent persistence fallback, or atomic cross-tab transaction.
+`useStoredDocument` in `lib/runtime/hooks.ts` binds this to stable snapshots after
+hydration and observes changes in the same tab and other tabs.
+
+The [editable dashboard](http://localhost:3000/cookbook/editable-dashboard) is the
+first consumer: its draft stays separate from its saved configuration, failed
+saves retain edits, and an observed external change asks the user to reload it.
+Only widget IDs and grid geometry are stored. Widgets are resolved by the recipe's
+registry; the reusable component has no storage or account dependency. Narrow
+screens stack widgets without changing the saved desktop arrangement.
+
+[`lib/realtime`](lib/realtime/doc.ts) supplies typed event subscriptions with
+memory and native WebSocket adapters. The caller decodes its backend's envelope.
+`useLiveQueries` (or `LiveQueryBridge`) in `lib/query` maps events to cache keys,
+coalesces bursts, and resyncs declared keys when a connection opens. Keep the
+source, mapping function, and resync keys stable for the subscription lifetime.
+There is no blanket page remount, event-delivery guarantee, or vendor auth protocol.
+The [live recipe](http://localhost:3000/cookbook/live-updates) demonstrates missed
+events and stale-but-visible data with a controllable in-process source; it does
+not connect to a deployed WebSocket backend.
+
+The [workspace catalog](http://localhost:3000/kitchen-sink/workspaces) includes
+editable, locked, and empty states. React Flow and React Grid Layout stay behind
+owned wrappers in `components/workspaces`. Their public contracts use Flover
+types; domain graphs, widget registries, save boundaries, and route behavior
+belong to their callers. Undo/history and per-breakpoint authored layouts remain
+possible follow-ups, shaped by actual product requirements.
+
 ## Structure
 
-- `app/` — routes and framework bindings; the kitchen sink is under `app/(dev)/`.
+- `app/` — routes and framework bindings; the app/cookbook share `app/(workspace)/`,
+  and the kitchen sink is under `app/(dev)/`.
 - `components/` — grouped components with CSS Modules, public barrels, and contracts.
 - `styles/` — tokens, resets, and cascade layers.
-- `lib/` — kernel, transport port/adapters, services, composition root, cache, and runtime.
+- `lib/` — kernel, transport port/adapters, services, composition root, cache, runtime, storage, and realtime.
 - `protocols/` and `notes/` — optional working practices and architectural reasoning.
 
 Read [CLAUDE.md](CLAUDE.md) and [protocols/README.md](protocols/README.md) for the
@@ -104,10 +161,20 @@ the actual component files.
 ## Verification
 
 ```sh
+npm run check:architecture -- --changed
+npm run test:architecture
 npm test
 npm run lint
 npm run build
 ```
+
+The [architecture checker](tools/architecture/README.md) enforces declared layer,
+adapter, wrapper, and server-return boundaries. Use `--all` for a baseline or
+`--base main` for a branch review. It reports scope, exceptions, and evidence;
+exit 0 covers mechanical checks only. Reuse, error scope, composition, and design
+system judgments stay pending for the [agent review guide](tools/architecture/REVIEW.md).
+Ask: “Review these changes using tools/architecture/REVIEW.md.” Neither the
+command nor that review applies fixes automatically.
 
 UI tests exercise accessible output, keyboard behavior, collection transitions,
 and chart data/geometry. These are ordinary implementation-aware tests. The

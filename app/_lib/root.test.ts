@@ -56,6 +56,7 @@ const signedIn = async () => {
 beforeEach(() => {
   jar.clear();
   requestHeaders.delete("x-flover-search");
+  requestHeaders.delete("x-flover-path");
   resetSessionFixtures();
   vi.resetModules();
 });
@@ -100,6 +101,22 @@ describe("the guard ends three ways", () => {
 
   it("an expired or invented token is also a redirect", async () => {
     jar.set(SESSION_COOKIE, "tok_invented");
+    expect(await guard()).toEqual({ outcome: "redirect", to: "/sign-in" });
+  });
+
+  it("preserves the requested cookbook recipe and filters when redirecting", async () => {
+    requestHeaders.set("x-flover-path", "/cookbook/activity?page=2");
+    const result = await guard();
+    expect(result.outcome).toBe("redirect");
+    if (result.outcome === "redirect") {
+      const target = new URL(result.to, "https://flover.invalid");
+      expect(target.pathname).toBe("/sign-in");
+      expect(target.searchParams.get("returnTo")).toBe("/cookbook/activity?page=2");
+    }
+  });
+
+  it("does not trust a destination outside the allowed page areas", async () => {
+    requestHeaders.set("x-flover-path", "//other.example");
     expect(await guard()).toEqual({ outcome: "redirect", to: "/sign-in" });
   });
 

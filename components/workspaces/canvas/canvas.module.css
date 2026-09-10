@@ -1,0 +1,28 @@
+/* Engine CSS is unlayered; these scoped overrides must share its precedence. */
+.canvas {
+  block-size: 520px; min-inline-size: 0; overflow: hidden; border: 1px solid var(--line-strong);
+  border-radius: var(--radius-3); background: var(--surface-sunk); color: var(--ink);
+  --xy-background-color: var(--surface-sunk);
+  --xy-edge-stroke: var(--ink-3);
+  --xy-edge-stroke-width: 1.5;
+  --xy-edge-stroke-selected: var(--accent);
+  --xy-controls-button-background-color: var(--surface-panel);
+  --xy-controls-button-background-color-hover: var(--surface-raised);
+  --xy-controls-button-color: var(--ink);
+  --xy-controls-button-color-hover: var(--ink);
+  --xy-controls-button-border-color: var(--line-strong);
+  --xy-edge-label-background-color: var(--surface-panel);
+  --xy-edge-label-color: var(--ink-2);
+}
+.node { padding: var(--space-6); background: var(--surface-panel); border: 1px solid var(--line-heavy); border-radius: var(--radius-3); color: var(--ink); }
+.canvas :global(.react-flow__node.selected) .node { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.canvas :global(.react-flow__node:focus-visible) { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: var(--radius-3); }
+/* The image reset caps SVG width at its parent. Edge SVGs deliberately overflow
+   a zero-width coordinate container, so that cap prevents them from painting. */
+.canvas :global(.react-flow__edges svg) { max-inline-size: none; }
+.canvas .handle { opacity: 0; pointer-events: none; }
+.empty { display: grid; place-items: center; block-size: 100%; padding: var(--space-7); color: var(--ink-3); font-size: var(--text-13); }
+.canvas :global(.react-flow__attribution) { background: var(--surface-panel); color: var(--ink-3); }
+.canvas :global(.react-flow__controls-button) { inline-size: 34px; block-size: 34px; }
+.canvas :global(.react-flow__controls-button:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 600px) { .canvas { block-size: 440px; } }

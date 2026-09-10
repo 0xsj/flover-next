@@ -21,6 +21,7 @@ import { ChartsSection } from "./charts";
 import { PatternsSection } from "./patterns";
 import { StatisticalChartsSection } from "./statistical-charts";
 import { NetworksSection } from "./networks";
+import { WorkspacesSection } from "./workspaces";
 
 /** Every catalog entry must have a renderer. This module stays server-side. */
 export const SECTION_COMPONENTS = {
@@ -43,6 +44,7 @@ export const SECTION_COMPONENTS = {
   networks: NetworksSection,
   patterns: PatternsSection,
   shells: ShellsSection,
+  workspaces: WorkspacesSection,
   chrome: ChromeSection,
   data: DataSection,
 } satisfies Record<SectionId, ComponentType>;

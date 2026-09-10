@@ -19,7 +19,7 @@ export default function KitchenSinkLayout({ children }: LayoutProps<"/kitchen-si
         <div className={s.headerInner}>
           <Link href="/kitchen-sink" aria-label="Flover kitchen sink"><Mark /></Link>
           <span className={s.headerLabel}>Component catalog</span>
-          <div className={s.controls}><ThemeToggle /><DensityToggle /></div>
+          <div className={s.controls}><Link href="/cookbook">Cookbook</Link><ThemeToggle /><DensityToggle /></div>
         </div>
       </header>
       <div className={s.body}>

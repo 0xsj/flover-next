@@ -19,6 +19,7 @@ export type AuthFormProps = {
   fields: readonly AuthFieldSpec[];
   submit: string;
   pendingLabel: string;
+  returnTo: string;
   hint?: React.ReactNode;
 };
 
@@ -42,7 +43,7 @@ export type AuthFormProps = {
  * React resets an uncontrolled form after its action completes, refusal
  * included, so `defaultValue` has to come back from the server or the email a
  * reader just typed vanishes as they are told to try again. */
-export function AuthForm({ action, fields, submit, pendingLabel, hint }: AuthFormProps) {
+export function AuthForm({ action, fields, submit, pendingLabel, hint, returnTo }: AuthFormProps) {
   const [state, formAction, pending] = useActionState(action, IDLE);
 
   /* One read of the tag, and the two branches below cannot both be taken. That
@@ -55,6 +56,7 @@ export function AuthForm({ action, fields, submit, pendingLabel, hint }: AuthFor
 
   return (
     <form action={formAction} className={s.form} noValidate>
+      <input type="hidden" name="returnTo" value={returnTo} />
       {formMessage ? (
         /* `live` because it appears in response to something the reader did.
            Most alerts are rendered with the page and must not be live; this one

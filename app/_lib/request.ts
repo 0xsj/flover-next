@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { parsePlan, type Plan } from "@/lib/chaos";
+import { safeReturnTo } from "./return-to";
 
 /** The header `proxy.ts` copies the request's query string into.
  *
@@ -8,6 +9,12 @@ import { parsePlan, type Plan } from "@/lib/chaos";
  *  headers, cookies or a rewrite. So this is the sanctioned route, not a
  *  workaround for a missing one. */
 export const SEARCH_HEADER = "x-flover-search";
+export const PATH_HEADER = "x-flover-path";
+
+/** Written by the proxy on every request, including production and navigation. */
+export async function requestReturnTo(): Promise<string> {
+  return safeReturnTo((await headers()).get(PATH_HEADER));
+}
 
 /** The chaos plan for THIS request, available to every server component.
  *

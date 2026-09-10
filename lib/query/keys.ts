@@ -11,6 +11,9 @@
  *
  *  The `example` entry goes when the specimen service does. */
 export const keys = {
+  cookbook: {
+    live: (instance: string) => ["cookbook", "live", instance] as const,
+  },
   session: {
     root: () => ["session"] as const,
     all: () => ["session", "sessions"] as const,

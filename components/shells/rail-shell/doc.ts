@@ -23,6 +23,8 @@
  * The gallery uses separate preview documents so its own main landmark and
  * providers cannot stand in for the shell's. Preference synchronization belongs
  * to those preview routes; importing RailShell does not connect runtime stores.
+ * The app and cookbook also share this shell through app/(workspace). Their
+ * router binding supplies links and active state without changing this primitive.
  * See notes/techniques/a-shell-preview-needs-its-own-document.md.
  */
 export {};

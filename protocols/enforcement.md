@@ -176,6 +176,20 @@ is what makes the rest trustworthy.
 
 ---
 
+## Flover's current implementation
+
+[`tools/architecture`](../tools/architecture/README.md) implements eight mechanical
+checks and four explicit review lenses. The executable
+[rulebook](../tools/architecture/rules.mjs) owns their IDs, detection contracts,
+exemptions, and limits; the IDs in the examples above are illustrative.
+Its fixture tests give every mechanical rule a deliberately invalid input.
+Registry validation rejects a missing detector or an exemption without a reason.
+
+Reuse, error scope, composition, and meaningful token/accessibility use still
+require the [contextual review](../tools/architecture/REVIEW.md). A successful CLI
+exit does not close them. These are implementation-aware checks; the separate
+spec-test protocol supplies no provenance claim for this runner.
+
 ## Checklist
 
 ```

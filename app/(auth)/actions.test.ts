@@ -57,6 +57,16 @@ beforeEach(() => {
 });
 
 describe("signing in", () => {
+  it("returns to the requested cookbook recipe after signing in", async () => {
+    const { redirectedTo } = await run(signInAction, { ...DEMO_CREDENTIALS, returnTo: "/cookbook/activity?page=2" });
+    expect(redirectedTo).toBe("/cookbook/activity?page=2");
+    expect(jar.has(SESSION_COOKIE)).toBe(true);
+  });
+
+  it("ignores a forged external return destination submitted with the form", async () => {
+    const { redirectedTo } = await run(signInAction, { ...DEMO_CREDENTIALS, returnTo: "//other.example/cookbook" });
+    expect(redirectedTo).toBe("/app");
+  });
   it("sets the cookie and navigates", async () => {
     const { state, redirectedTo } = await run(signInAction, DEMO_CREDENTIALS);
     expect(state).toBeNull();
@@ -123,6 +133,10 @@ describe("signing in", () => {
 
 describe("signing up", () => {
   const fresh = { name: "Grace Hopper", email: "grace@example.com", password: "compiler1" };
+
+  it("keeps the destination when creating an account", async () => {
+    expect((await run(signUpAction, { ...fresh, returnTo: "/cookbook/dashboard" })).redirectedTo).toBe("/cookbook/dashboard");
+  });
 
   it("creates, signs in and navigates in one action", async () => {
     const { redirectedTo } = await run(signUpAction, fresh);

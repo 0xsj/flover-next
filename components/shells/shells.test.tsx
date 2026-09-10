@@ -63,6 +63,23 @@ describe("AuthShell", () => {
 });
 
 describe("SidebarNav", () => {
+  it("can mark a landing link as exact while a child page is active", () => {
+    render(<SidebarNav groups={[{ items: [
+      { href: "/cookbook", label: "Start here", exact: true },
+      { href: "/cookbook/activity", label: "Activity" },
+    ] }]} current="/cookbook/activity" />);
+    expect(screen.getByRole("link", { name: "Start here" })).not.toHaveAttribute("aria-current");
+    expect(screen.getByRole("link", { name: "Activity" })).toHaveAttribute("aria-current", "page");
+  });
+
+  it("retains link semantics and active state when the caller supplies a router link", () => {
+    render(<SidebarNav groups={groups} current="/app" renderLink={(item, content) => <a href={item.href} data-router-link>{content}</a>} />);
+    const link = screen.getByRole("link", { name: "Overview" });
+    expect(link).toHaveAttribute("href", "/app");
+    expect(link).toHaveAttribute("data-router-link");
+    expect(link).toHaveAttribute("aria-current", "page");
+    expect(link.querySelector("a")).toBeNull();
+  });
   it("marks the current page for a reader, not only in colour", () => {
     render(<SidebarNav groups={groups} current="/app" />);
     expect(screen.getByRole("link", { name: "Overview" })).toHaveAttribute("aria-current", "page");

@@ -48,7 +48,7 @@ const value = (v: Space | Margin | undefined): string | undefined =>
 
 export function spaceStyle(props: SpaceProps): CSSProperties {
   const v = value;
-  return {
+  const style: CSSProperties = {
     padding: v(props.p),
     paddingInline: v(props.px), paddingBlock: v(props.py),
     paddingBlockStart: v(props.pt), paddingBlockEnd: v(props.pb),
@@ -59,6 +59,10 @@ export function spaceStyle(props: SpaceProps): CSSProperties {
     marginInlineStart: v(props.ml), marginInlineEnd: v(props.mr),
     gap: v(props.gap), columnGap: v(props.gapX), rowGap: v(props.gapY),
   };
+  // In a browser, assigning gap and then clearing an absent rowGap/columnGap
+  // clears the shorthand too. Omit absent declarations, rather than asking
+  // React to write empty longhands over a supplied shorthand on client mount.
+  return Object.fromEntries(Object.entries(style).filter(([, value]) => value !== undefined));
 }
 
 /** Split the space props off, so the rest can be spread onto a DOM element

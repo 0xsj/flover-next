@@ -31,8 +31,9 @@ async function* walk(dir: string): AsyncGenerator<string> {
   let entries;
   try {
     entries = await readdir(dir, { withFileTypes: true });
-  } catch {
-    return;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return;
+    throw error;
   }
   for (const e of entries) {
     const full = path.join(dir, e.name);
@@ -42,15 +43,14 @@ async function* walk(dir: string): AsyncGenerator<string> {
 }
 
 describe("no fixture reaches the browser bundle", () => {
-  it("no client chunk contains a string only a fixture has", async () => {
+  it("no client chunk contains a string only a fixture has", async (context) => {
     const chunks: string[] = [];
     for await (const file of walk(CHUNKS)) chunks.push(file);
 
     if (chunks.length === 0) {
       /* The null result is a result: say it was not run rather than report a
          pass nobody earned. */
-      console.warn("no build found at .next/static/chunks — run `npm run build` first");
-      return;
+      context.skip("no build found at .next/static/chunks — run `npm run build` first");
     }
 
     const offenders: string[] = [];

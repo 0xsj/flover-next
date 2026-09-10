@@ -25,7 +25,9 @@
  *
  * # The current route is a PROP, all the way down
  *
- * `SidebarNav` takes `current` rather than reading the router, for the reason
+ * `SidebarNav` can take renderLink from a framework binding to retain client
+ * navigation, and exact items for section landing pages. It takes `current`
+ * rather than reading the router, for the reason
  * `NavLink` gives one level down: a router is the one thing that cannot be
  * shared with the Solid and Svelte siblings. The six-line client component that
  * reads the pathname lives in the route, which is framework-specific anyway.

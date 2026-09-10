@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useSyncExternalStore } from "react";
+import type { StoredDocument } from "../storage";
+import { createDocumentStore } from "./document-store";
 import { density, hydrateDensity, type Density } from "./density";
 import { interaction } from "./interaction";
 import type { Store } from "./store";
@@ -47,4 +49,11 @@ export function useDensity(): { value: Density; set: (next: Density) => void } {
  *  handler's job, not a hook's — a render is not a user action. */
 export function useInteraction(): string {
   return useStore(interaction);
+}
+
+/** The caller keeps draft state separate and decides when to save or reset. */
+export function useStoredDocument<T>(document: StoredDocument<T>) {
+  const store = useMemo(() => createDocumentStore(document), [document]);
+  useEffect(() => store.connect(), [store]);
+  return useStore(store);
 }

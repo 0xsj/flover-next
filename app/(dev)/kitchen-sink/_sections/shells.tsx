@@ -83,6 +83,13 @@ export function ShellsSection() {
         <Row label="nowhere in particular">
           <div className={s.navWidth}><SidebarNav groups={groups} /></div>
         </Row>
+        <Row label="exact landing page and router links">
+          <div className={s.navWidth}><SidebarNav groups={[{ items: [
+            { href: "/cookbook", label: "Start here", exact: true },
+            { href: "/cookbook/dashboard", label: "Dashboard" },
+          ] }]} current="/cookbook/dashboard" label="Cookbook example"
+            renderLink={(item, content) => <Link href={item.href}>{content}</Link>} /></div>
+        </Row>
 
         <p className={s.limits}>
           A navigation genuinely is a list of links, so this one takes items as
@@ -95,6 +102,9 @@ export function ShellsSection() {
           <strong>segment</strong>: a nested route marks the section it belongs
           to, <code>/app</code> does not light up for <code>/apples</code>, and{" "}
           <code>/</code> is exempt or it would be current everywhere.
+          {" "}An <code>exact</code> landing item stays inactive on a child page.
+          The <code>renderLink</code> slot lets a framework binding supply its
+          own navigation link while retaining these semantics.
         </p>
         <p className={s.limits}>
           <code>current</code> is a <strong>prop</strong>. Reading the route
