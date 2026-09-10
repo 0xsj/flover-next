@@ -1,6 +1,6 @@
 import { withChaos, type Plan } from "../chaos";
 import {
-  createFetchClient, createMemoryClient,
+  createFetchClient, createMemoryClient, withDiagnostics,
   type HttpClient, type Latency, type MemoryRoute,
 } from "../http";
 import { routes as defaultRoutes } from "./fixtures";
@@ -99,7 +99,7 @@ export function createRoot(options: RootOptions = {}): Root {
   const wrap = (client: HttpClient): HttpClient => {
     const wrapped = withChaos(client, options.chaos, correlationId);
     if (wrapped !== client) chaosApplied = true;
-    return wrapped;
+    return withDiagnostics(wrapped);
   };
 
   const clientFor = (domain: Domain): HttpClient => {

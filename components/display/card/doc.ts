@@ -26,6 +26,9 @@
  * stacking context; action/footer wrappers sit above the primary hit area.
  * Media has its own positioned frame so a caller's absolutely positioned image
  * fills the media slot rather than the entire card. Parts remain server usable.
+ * The body's grid column has a zero minimum: an automatic track lets a nested
+ * scrollable table widen the whole body, including unrelated controls. A bounded
+ * track keeps horizontal scrolling with the table at narrow viewport widths.
  *
  * § PROVENANCE
  * Contract written before implementation, 2026-09-10. Verification in this pass

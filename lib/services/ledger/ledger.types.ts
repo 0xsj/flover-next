@@ -1,3 +1,5 @@
+import type { CallOptions } from "../../http";
+
 /** Where an entry sits. Deliberately three, and deliberately not more: a scope
  *  a product cannot enforce in its database is a scope its audit log will
  *  eventually lie about. */
@@ -63,7 +65,7 @@ export type AuditPage = {
   facets?: Array<{ facet: string; total: number }>;
 };
 
-export type PageOptions = {
+export type PageOptions = CallOptions & {
   /** The opaque cursor from a previous page's `next`. */
   after?: string;
   limit?: number;
@@ -74,5 +76,4 @@ export type PageOptions = {
   facet?: string;
   /** Everything that belonged to one interaction. The column made useful. */
   correlation?: string;
-  signal?: AbortSignal;
 };

@@ -5,7 +5,7 @@
   .leading { flex: none; }
   .title { min-inline-size: 0; }
   .description { font-size: var(--text-12-5); line-height: var(--leading-body); color: var(--ink-3); }
-  .body { display: grid; align-content: start; gap: var(--space-5); padding: var(--space-6); flex: 1; min-inline-size: 0; }
+  .body { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: var(--space-5); padding: var(--space-6); flex: 1; min-inline-size: 0; }
   .header + .body { padding-block-start: 0; }
   .footer { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-4); margin-block-start: auto; padding: var(--space-5) var(--space-6); border-block-start: 1px solid var(--line); }
   .media { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--surface-sunk); }

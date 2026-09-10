@@ -14,6 +14,17 @@
  *
  * `lib/root` remains the only file that picks an implementation.
  *
+ * Successful JSON is still unknown data. Services apply response readers after
+ * either adapter answers; see response.doc.ts. Readers validate and project
+ * domain DTOs, and can map a different backend's success envelope. Malformed
+ * success bodies are internal / invalid_response, not user input errors.
+ *
+ * Optional CallOptions.trace is an explicit observation scope. withDiagnostics
+ * records transport outcomes without inspecting addresses or payloads; response
+ * decoders record their own stage. Roots put the decorator outside fault
+ * injection, so simulated transport failures are visible too. No trace means
+ * no recording, and a broken recorder cannot change the request's Result.
+ *
  * # `envelope.ts` is the only file that may name a wire key, a header or a status
  *
  * Everything above it sees only `Failure`. That is what makes a closed union

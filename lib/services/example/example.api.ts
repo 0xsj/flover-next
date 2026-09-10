@@ -4,6 +4,7 @@ import {
 } from "../../kernel";
 import type { CallOptions, HttpClient } from "../../http";
 import { NO_DEFAULT, type Item, type NewItem } from "./example.types";
+import { decodeItem, decodeItems, decodeOptionalItem } from "./example.responses";
 
 /* Takes the client, never imports one. That is the rule the whole tier exists
  * to hold — see ../doc.ts. */
@@ -22,7 +23,8 @@ export async function listItems(
   workspace: string,
   options?: CallOptions,
 ): Promise<Result<Item[], ReadFailure>> {
-  return (await client.get<Item[]>("/items", { params: { workspace }, signal: options?.signal }))
+  return (await client.get<unknown>("/items", { params: { workspace }, signal: options?.signal, trace: options?.trace }))
+    .andThen(value => decodeItems(value, options?.trace))
     .mapErr(asRead);
 }
 
@@ -33,7 +35,7 @@ export async function getItem(
   id: string,
   options?: CallOptions,
 ): Promise<Result<Item, ReadFailure>> {
-  return (await client.get<Item>(`/items/${id}`, { signal: options?.signal })).mapErr(asRead);
+  return (await client.get<unknown>(`/items/${id}`, { signal: options?.signal, trace: options?.trace })).andThen(value => decodeItem(value, options?.trace)).mapErr(asRead);
 }
 
 /** A read whose emptiness is a legitimate answer, so it says so in its type.
@@ -48,7 +50,8 @@ export async function findDefaultItem(
   options?: CallOptions,
 ): Promise<Result<Item | null, TransportFailure>> {
   return optional(
-    (await client.get<Item>(`/workspaces/${workspace}/default-item`, { signal: options?.signal }))
+    (await client.get<unknown>(`/workspaces/${workspace}/default-item`, { signal: options?.signal, trace: options?.trace }))
+      .andThen(value => decodeOptionalItem(value, options?.trace))
       .mapErr(asRead),
     absentWhenType(NO_DEFAULT),
   );
@@ -67,7 +70,8 @@ export async function createItem(
   if (!/^[a-z0-9.-]+$/i.test(input.host)) fields.host = "That is not a hostname.";
   if (Object.keys(fields).length) return err(invalid("Check the form.", fields));
 
-  return (await client.post<Item>("/items", { body: input, signal: options?.signal }))
+  return (await client.post<unknown>("/items", { body: input, signal: options?.signal, trace: options?.trace }))
+    .andThen(value => decodeItem(value, options?.trace))
     .mapErr(asWrite);
 }
 
@@ -99,8 +103,8 @@ export async function renameItem(
   const current = await getItem(client, id, options);
   if (!current.ok) return current;
 
-  return (await client.patch<Item>(`/items/${id}`, {
+  return (await client.patch<unknown>(`/items/${id}`, {
     body: { name, host: current.value.host },
-    signal: options?.signal,
-  })).mapErr(asRead);
+    signal: options?.signal, trace: options?.trace,
+  })).andThen(value => decodeItem(value, options?.trace)).mapErr(asRead);
 }

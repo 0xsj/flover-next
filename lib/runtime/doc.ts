@@ -1,15 +1,15 @@
 /**
  * runtime — state the shell owns and no server has an opinion about.
  *
- * # Stores are framework-free; one file binds
+ * # Stores are framework-free; bindings stay explicit
  *
  * Every store here is a plain subscribe/get/set object, so the state machines
- * and the persistence copy verbatim into the sibling templates. `hooks.ts` is
- * the only file that imports a framework, and each sibling writes its own —
- * three lines against `useSyncExternalStore`, or its equivalent.
+ * and the persistence copy verbatim into the sibling templates. `hooks.ts`
+ * binds stores; `url-state.ts` binds portable query codecs to Next navigation.
+ * Each sibling writes those bindings against its own framework.
  *
  * That is why this tier is NOT in the copy-verbatim set even though most of it
- * is: one file in it is a binding, and a check that says a directory is
+ * is: some files are bindings, and a check that says a directory is
  * portable when one file is not would be worse than no check.
  *
  * # `getSnapshot` must be stable, or it is a render loop
@@ -61,5 +61,14 @@
  * and connects after mount. Consumers keep their unsaved drafts separately;
  * an external storage notification must not erase an edit. Unlike theme/density,
  * an explicitly saved layout needs visible write failure and reset behavior.
+ *
+ * # URL writes read at event time
+ *
+ * A render snapshot can be older than the latest browser address. Merging a
+ * second control change against that snapshot can erase the first. The binding
+ * reads location when the action runs, preserves the fragment, and reports a
+ * refused history write as a region-level Result. Push records user decisions;
+ * replace repairs the current address without adding a second history entry.
+ * Server-fetched query state should reuse the schema with router navigation.
  */
 export {};

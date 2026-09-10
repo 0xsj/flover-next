@@ -3,12 +3,14 @@ export const POLICY = {
   roots: ["app", "components", "lib"],
   portable: {
     kernel: ["kernel"],
+    diagnostics: ["diagnostics", "kernel"],
+    "url-state": ["url-state", "kernel"],
     storage: ["storage", "kernel"],
     realtime: ["realtime", "kernel"],
-    http: ["http", "kernel"],
+    http: ["http", "diagnostics", "kernel"],
     chaos: ["chaos", "http", "kernel"],
     services: ["services", "http", "kernel"],
-    root: ["root", "services", "http", "chaos", "kernel"],
+    root: ["root", "services", "http", "chaos", "diagnostics", "kernel"],
   },
   frameworks: ["react", "react-dom", "next", "svelte", "solid-js", "@tanstack", "radix-ui", "@radix-ui", "react-aria", "react-stately", "react-aria-components"],
   libraryOwners: [

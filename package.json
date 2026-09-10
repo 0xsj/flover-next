@@ -9,6 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:resilience": "vitest run lib/http/response.test.ts lib/services/responses.test.ts lib/chaos/sequence.test.ts lib/runtime/latest-read.test.ts 'app/(workspace)/cookbook/(recipes)/resilience/note-model.test.ts'",
+    "test:resilience:mutations": "node tools/resilience/mutate.mjs",
     "check:architecture": "node tools/architecture/cli.mjs",
     "test:architecture": "vitest run tools/architecture/check.test.ts"
   },

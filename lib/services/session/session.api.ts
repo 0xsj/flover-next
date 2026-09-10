@@ -3,6 +3,7 @@ import {
   type Fails, type Result, type TransportFailure,
 } from "../../kernel";
 import type { CallOptions, HttpClient } from "../../http";
+import { decodeSession, decodeSessions, decodeUser } from "./session.responses";
 import {
   MIN_PASSWORD,
   type Credentials, type Registration, type Session, type SessionSummary,
@@ -70,10 +71,10 @@ export async function signIn(
   if (!credentials.password) fields.password = "Enter your password.";
   if (Object.keys(fields).length) return err(invalid("Check the form.", fields));
 
-  return (await client.post<Session>("/auth/sign-in", {
+  return (await client.post<unknown>("/auth/sign-in", {
     body: { email, password: credentials.password },
-    signal: options?.signal,
-  })).mapErr(asSignIn);
+    signal: options?.signal, trace: options?.trace,
+  })).andThen(value => decodeSession(value, options?.trace)).mapErr(asSignIn);
 }
 
 export async function signUp(
@@ -92,10 +93,10 @@ export async function signUp(
   }
   if (Object.keys(fields).length) return err(invalid("Check the form.", fields));
 
-  return (await client.post<Session>("/auth/sign-up", {
+  return (await client.post<unknown>("/auth/sign-up", {
     body: { name, email, password: registration.password },
-    signal: options?.signal,
-  })).mapErr(asSignUp);
+    signal: options?.signal, trace: options?.trace,
+  })).andThen(value => decodeSession(value, options?.trace)).mapErr(asSignUp);
 }
 
 /** Who the bearer belongs to.
@@ -107,7 +108,8 @@ export async function currentUser(
   client: HttpClient,
   options?: CallOptions,
 ): Promise<Result<User, TransportFailure>> {
-  return (await client.get<User>("/auth/me", { signal: options?.signal }))
+  return (await client.get<unknown>("/auth/me", { signal: options?.signal, trace: options?.trace }))
+    .andThen(value => decodeUser(value, options?.trace))
     .mapErr(asTransport);
 }
 
@@ -125,7 +127,8 @@ export async function listSessions(
   client: HttpClient,
   options?: CallOptions,
 ): Promise<Result<SessionSummary[], TransportFailure>> {
-  return (await client.get<SessionSummary[]>("/auth/sessions", { signal: options?.signal }))
+  return (await client.get<unknown>("/auth/sessions", { signal: options?.signal, trace: options?.trace }))
+    .andThen(value => decodeSessions(value, options?.trace))
     .mapErr(asTransport);
 }
 
@@ -147,8 +150,8 @@ export async function revokeSession(
   id: string,
   options?: CallOptions,
 ): Promise<Result<null, RevokeFailure>> {
-  return (await client.delete<null>(`/auth/sessions/${encodeURIComponent(id)}`, {
-    signal: options?.signal,
+  return (await client.delete<unknown>(`/auth/sessions/${encodeURIComponent(id)}`, {
+    signal: options?.signal, trace: options?.trace,
   }))
     .map(() => null)
     .mapErr(asRevoke);
@@ -161,7 +164,7 @@ export async function signOut(
   client: HttpClient,
   options?: CallOptions,
 ): Promise<Result<null, TransportFailure>> {
-  return (await client.post<null>("/auth/sign-out", { signal: options?.signal }))
+  return (await client.post<unknown>("/auth/sign-out", { signal: options?.signal, trace: options?.trace }))
     .map(() => null)
     .mapErr(asTransport);
 }

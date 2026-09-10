@@ -7,6 +7,9 @@
  * job, and the caller is the one place that differs per framework — so this
  * tier imports nothing framework-shaped and travels to the sibling templates
  * unchanged, which the boundaries check enforces.
+ * Optional diagnostics use the same rule: the caller supplies an explicit trace
+ * in CallOptions. Roots wrap transports outside chaos, but do not construct a
+ * global recorder, keep interaction history, or choose an export destination.
  *
  * The cost is one line at each call site passing the token and the plan in.
  * The alternative is a tier that reads its runtime's request context and

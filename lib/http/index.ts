@@ -4,3 +4,6 @@ export type { Latency, MemoryConfig, MemoryRequest, MemoryRoute } from "./memory
 export { failureFromResponse, failureFromTransport } from "./envelope";
 export { CORRELATION_HEADER, REQUEST_ID_HEADER } from "./port";
 export type { CallOptions, ClientConfig, FailureDecoder, HttpClient, RequestOptions } from "./port";
+export { responseArray, responseDecoder, responseObject, responseText, responseTimestamp } from "./response";
+export type { ResponseDecoder, ResponseReader } from "./response";
+export { withDiagnostics } from "./diagnostics-client";

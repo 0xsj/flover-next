@@ -1,6 +1,7 @@
 import { narrow, type Result, type TransportFailure } from "../../kernel";
 import type { HttpClient } from "../../http";
 import type { AuditPage, PageOptions } from "./ledger.types";
+import { decodeAuditPage } from "./ledger.responses";
 
 /* Takes the client, never imports one.
  *
@@ -21,7 +22,7 @@ export async function getMyActivity(
   client: HttpClient,
   options?: PageOptions,
 ): Promise<Result<AuditPage, TransportFailure>> {
-  return (await client.get<AuditPage>("/me/activity", {
+  return (await client.get<unknown>("/me/activity", {
     /* `undefined` values are dropped by the port rather than sent as the string
        "undefined", so a first page and a filtered page are the same call. */
     params: {
@@ -30,6 +31,6 @@ export async function getMyActivity(
       facet: options?.facet,
       correlation: options?.correlation,
     },
-    signal: options?.signal,
-  })).mapErr(asTransport);
+    signal: options?.signal, trace: options?.trace,
+  })).andThen(value => decodeAuditPage(value, options?.trace)).mapErr(asTransport);
 }

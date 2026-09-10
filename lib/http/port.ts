@@ -1,4 +1,5 @@
 import type { Failure, Result } from "../kernel";
+import type { DiagnosticTrace } from "../diagnostics";
 
 /** Turn a non-2xx response into exactly one Failure. TOTAL — it must never
  *  throw. The envelope ships one for the problem document this template
@@ -35,14 +36,17 @@ export const REQUEST_ID_HEADER = "x-request-id";
 
 /** What a CALLER may pass to a service.
  *
- *  Deliberately a strict subset of `RequestOptions`: a caller may cancel, and
+ *  Deliberately a strict subset of `RequestOptions`: a caller may cancel or
+ *  attach an explicit diagnostic trace, and
  *  may not set a header, a path or a query — those belong to the service, which
  *  is the only tier permitted to name them. Without this a request cannot be
  *  cancelled at all from above the transport, which makes the `canceled` kind
  *  unreachable however carefully every tier defends it. */
-export type CallOptions = { signal?: AbortSignal };
+export type CallOptions = { signal?: AbortSignal; trace?: DiagnosticTrace };
 
 export type RequestOptions = {
+  /** Explicit per-action context; never a mutable global current request. */
+  trace?: DiagnosticTrace;
   /** `undefined` values are dropped rather than sent as the string "undefined". */
   params?: Record<string, string | number | boolean | undefined>;
   body?: unknown;
@@ -52,8 +56,10 @@ export type RequestOptions = {
   headers?: Record<string, string>;
 };
 
-/** The transport can produce ANY failure, so the port says so. Narrowing is a
- *  service's job — and after the split it only ever decides domain kinds. */
+/** Raw transport values. A generic parameter is only a TypeScript assertion,
+ *  never runtime validation: services request <unknown> and use a response
+ *  decoder before exposing a domain value. See response.doc.ts.
+ *  The transport can produce ANY failure. Narrowing is a service's job. */
 export type HttpClient = {
   request<T>(method: string, path: string, options?: RequestOptions): Promise<Result<T, Failure>>;
   get<T>(path: string, options?: RequestOptions): Promise<Result<T, Failure>>;

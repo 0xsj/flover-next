@@ -27,6 +27,10 @@ and Failures recipes use the existing session guard and fixture-backed services.
 Editable dashboard, Canvas, and Live updates add interactive workspace recipes
 under the same guard. The dashboard saves per-account layouts in this browser;
 the canvas edits last for the current visit; live events use a labelled simulation.
+The Resilience recipe exercises malformed responses, out-of-order reads, and
+uncertain saves against isolated memory fixtures, including production previews.
+Diagnostics records the path through those reads. URL state demonstrates a
+shareable collection with search, filters, sorting, pagination, and view mode.
 Sign-in and sign-up return to the requested local page, preserving its query.
 
 Routes live under `app/(workspace)/`: `app/` is the product canvas, and
@@ -35,6 +39,71 @@ Start product work in `app/(workspace)/app/page.tsx`; it imports no cookbook
 implementation. Add recipes under `cookbook/(recipes)/` and register their
 destinations in the navigation metadata. Old `/app/activity`, `/app/chaos`, and
 `/app/failures` links redirect to their cookbook counterparts with queries intact.
+
+## Response boundaries and recovery
+
+Services request `unknown` and decode every consumed successful response before
+exposing domain values. Readers beside each service validate nested data and
+select only public fields. `lib/http/response.ts` supplies small reader helpers;
+a product can map its own success envelope in its reader without changing the
+transport or UI. A malformed response is `internal` / `invalid_response`, while
+an empty collection remains a valid result.
+
+The [resilience recipe](http://localhost:3000/cookbook/resilience) covers retaining
+previous data after a bad refresh, ignoring an obsolete response, and preserving
+drafts while a save outcome is reconciled. `lib/chaos/sequence.ts` supplies finite
+request scripts and manually released response gates. These run only through an
+explicit isolated cookbook root; normal application chaos stays off in production.
+`lib/runtime/latest-read.ts` owns replaceable uncached reads; cached resources
+continue to use `lib/query`.
+
+The note example requires backend operation deduplication and authoritative
+status, including terminal absence. It does not promise safe retry against an
+arbitrary server. Drafts in this recipe last for the current visit only.
+
+```sh
+npm run test:resilience
+npm run test:resilience:mutations
+```
+
+The [mutation harness](tools/resilience/README.md) works in a temporary source
+copy and reports assertion failures separately from invalid mutants. These are
+ordinary implementation-visible tests with curated mutations, not a blind
+spec-test provenance claim.
+
+## Diagnostics and URL state
+
+`lib/diagnostics` exposes an optional recording port and a bounded memory adapter.
+Create a trace per action, pass it through service `CallOptions`, and wrap the
+action with `trace.run("operation", work)`. Roots decorate their transports;
+response decoders record separately. A successful request can therefore precede
+a contract rejection. Concurrent actions keep explicit trace identities, and a
+throwing or rejecting recorder cannot change the operation's result.
+
+The [diagnostics recipe](http://localhost:3000/cookbook/diagnostics) demonstrates
+success, transport failure, malformed success, empty results, cancellation, and
+recovery. Its visit-local buffer keeps only timing, opaque IDs, static operation
+labels, and failure classifications. Request bodies, addresses, credentials,
+and failure messages are excluded. Callers must supply non-sensitive labels and
+IDs; there is no automatic global recorder or remote exporter.
+
+`lib/url-state` owns typed query codecs, defaults, validation, and serialization
+without a framework dependency. `lib/runtime/url-state.ts` binds them to Next's
+search parameters and browser history. Writers merge against the latest address,
+omit defaults, preserve unowned parameters and fragments, and return a `Result`
+if validation or browser history fails. Malformed or repeated scalar parameters
+produce explicit warnings and typed defaults; reading never rewrites the URL.
+
+The [URL state recipe](http://localhost:3000/cookbook/url-state) uses those codecs
+for a public fixture collection. Filter changes reset pagination, view changes
+preserve it, and back/forward restores the view. Valid but out-of-range pages
+offer explicit recovery. Committed changes push history; explicit URL repairs
+replace it. This binding is for client-owned view state. A route that fetches
+server data from its query can reuse the codecs with router navigation instead.
+URLs are shareable: keep secrets and private drafts out of query state.
+
+Both modules have ordinary implementation-visible contract tests. They do not
+claim an implementation-blind test writer or a mutation score.
 
 ## Component catalog
 

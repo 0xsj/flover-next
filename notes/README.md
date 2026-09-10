@@ -42,6 +42,8 @@ do not recognise are the ones to open.
 
 | | |
 | --- | --- |
+| [next-history-metadata-skips-url-updates](substrate/next-history-metadata-skips-url-updates.md) | Passing Next's own history metadata into its patched history methods can bypass the update that keeps search-parameter hooks in sync. |
+| [a-lost-response-is-not-a-rejected-write](techniques/a-lost-response-is-not-a-rejected-write.md) | A lost response does not establish that a write was rejected. |
 | [a-flex-child-will-not-shrink](language/a-flex-child-will-not-shrink.md) | A flex item's `min-width` computes to `auto`, not `0`, so an item refuses to narrow below its own content and overflows the row it is in. |
 | [a-responsive-plot-can-shrink-its-meaning](techniques/a-responsive-plot-can-shrink-its-meaning.md) | A responsive SVG can preserve every data point while shrinking the labels that explain them below a readable size. |
 | [a-layout-bound-is-not-a-viewport](techniques/a-layout-bound-is-not-a-viewport.md) | A layout's requested bounds do not guarantee that its finished picture fits the viewport, especially when labels and annotations are added after layout. |

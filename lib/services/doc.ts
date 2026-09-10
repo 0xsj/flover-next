@@ -16,6 +16,10 @@
  *   3. narrows, in one line, so the caller's switch is three cases and not ten
  *   4. says whether absence is an answer, for a read where it might be
  *   5. validates, when it can produce the same shape the server would
+ *      — input errors are invalid; a malformed success is internal /
+ *        invalid_response. Consumed success bodies start as unknown and pass
+ *        through a domain response reader, including memory-fixture responses.
+ *        Readers explicitly select public fields instead of spreading payloads.
  *
  * It does not fetch, cache, render, decide which adapter to use, or know that a
  * status code exists.
@@ -27,12 +31,16 @@
  * was defended carefully at every tier while being unreachable from any screen.
  *
  * `CallOptions` is a strict SUBSET of the transport's own options: a caller may
- * cancel, and may not set a header, a path or a query. Those belong to the
+ * cancel or attach an explicit diagnostic trace, and may not set a header, a
+ * path or a query. Those belong to the
  * service, which is the only tier permitted to name them. Widening it to the
  * full request options would hand a screen the endpoint back.
  *
  * A composition threads it into every call it makes — a signal honoured by one
  * of two parallel requests is a cancellation that half worked.
+ * The same trace goes to both request options and the success decoder, so a
+ * transport success does not hide a later contract rejection. Caller-owned
+ * operation spans can also capture input validation and final domain outcomes.
  *
  * # `example/` is a specimen and should be deleted
  *
