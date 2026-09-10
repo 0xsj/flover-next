@@ -1,6 +1,8 @@
 import type { ComponentType } from "react";
 import type { SectionId } from "../_lib/catalog";
 import { FormsSection } from "./forms";
+import { PickersSection } from "./pickers";
+import { CardsSection } from "./cards";
 import { DataSection } from "./data";
 import { DisplaySection } from "./display";
 import { FeedbackSection } from "./feedback";
@@ -27,6 +29,8 @@ export const SECTION_COMPONENTS = {
   layout: LayoutSection,
   "type-components": TypeComponentsSection,
   forms: FormsSection,
+  pickers: PickersSection,
+  cards: CardsSection,
   display: DisplaySection,
   feedback: FeedbackSection,
   navigation: NavigationSection,

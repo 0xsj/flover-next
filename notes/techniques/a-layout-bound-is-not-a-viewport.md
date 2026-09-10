@@ -1,5 +1,7 @@
 A layout's requested bounds do not guarantee that its finished picture fits the viewport, especially when labels and annotations are added after layout.
 
+## Origin
+
 Observed while porting Overwatch's charts into Flover, 2026-09-10. Headless CoSE
 could place disconnected components outside its requested bounding box. The SVG
 still rendered correctly as markup, and its graph records were complete, while
@@ -17,3 +19,12 @@ without navigating the picture.
 
 The geometry tests check the first obligation. Browser inspection caught the
 second; neither a passing layout test nor a valid SVG establishes both.
+
+## Used in
+
+Flover's port of the Overwatch network diagrams: fitting completed CoSE
+positions, then allowing room for graph labels and group annotations.
+
+## Related
+
+[`a-responsive-plot-can-shrink-its-meaning`](a-responsive-plot-can-shrink-its-meaning.md).

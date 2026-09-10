@@ -18,11 +18,7 @@
  * Text values preserve numeric precision by default. Axis ticks may use a
  * shorter notation; a caller-supplied formatter explicitly owns its rounding.
  *
- * § MECHANICS
- * Simple SVG/CSS plots and semantic HTML use tokens. Richer chart engines can
- * occupy ChartFrame without changing its contract.
- *
- * § OVERWATCH FAMILY — PORT CONTRACT
+ * The Overwatch family extends this contract:
  * PlotFrame composes linear axes, grid, reference rules, marks, and overlays.
  * Volcano plots caller-transformed effect/significance values; BubblePlot maps
  * weight to area; RankedBar sorts descending and measures bars from zero.
@@ -37,12 +33,24 @@
  * rerun layout. Selection works with pointer, Enter, and Space, and exact graph
  * records remain available outside the picture. Dangling edges are ignored.
  *
- * § PORT MECHANICS
+ * § MECHANICS
+ * Simple SVG/CSS plots and semantic HTML use tokens. Richer chart engines can
+ * occupy ChartFrame without changing its contract.
+ *
  * Adapted from overwatch-ui, with its pure scale/layout/encoding functions and
  * SVG renderers. Cytoscape is confined to the headless CoSE layout adapter;
  * it does not render the graph or introduce an editor runtime. The selected
  * palette also comes from Overwatch; its original color-vision measurements
  * are provenance, not a claim of a fresh audit on every Flover surface.
  * These are bounded chart pictures, not drag/pan/zoom editors or a time scale.
+ *
+ * § VERIFICATION PROVENANCE — 2026-09-10
+ * The port contract was drafted after inspecting the existing Overwatch source.
+ * It records intended behavior here; it is not an independently authored oracle.
+ * The added tests had implementation access. No blind spec-test run or mutation
+ * score was produced in this pass. Geometry and accessible-output tests were
+ * supplemented by browser checks of keyboard selection, hydration, narrow
+ * layouts, and samples of chart-text contrast in both themes. Those samples
+ * do not establish every mark's contrast or color-vision distinguishability.
  */
 export {};

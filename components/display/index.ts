@@ -1,5 +1,6 @@
 export * from "./avatar";
 export * from "./badge";
+export * from "./card";
 export * from "./description-list";
 export * from "./empty";
 export * from "./mock";

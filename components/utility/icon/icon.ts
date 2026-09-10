@@ -12,6 +12,7 @@ export {
   ArrowUp,
   ArrowUpDown,
   ArrowUpRight,
+  CalendarDays,
   Check,
   ChevronDown,
   ChevronLeft,

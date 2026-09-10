@@ -19,5 +19,10 @@
  * container queries adapt to the shell's own available width, including gallery
  * previews. A local disclosure keeps navigation reachable without modal state.
  * AppShell remains the separate, simpler header-and-sidebar option.
+ *
+ * The gallery uses separate preview documents so its own main landmark and
+ * providers cannot stand in for the shell's. Preference synchronization belongs
+ * to those preview routes; importing RailShell does not connect runtime stores.
+ * See notes/techniques/a-shell-preview-needs-its-own-document.md.
  */
 export {};

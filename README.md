@@ -27,7 +27,9 @@ Theme and density controls apply to the whole catalog.
 | Foundations | Semantic tokens, type scale, Box, Flex, Container, Separator |
 | Typography | Heading with independent level and size, Text, SectionLabel |
 | Forms | Button, Input, Textarea, Field, Fieldset, Label, Checkbox, Radio, Select, Switch, Toggle, Slider |
+| Pickers | Combobox, MultiSelect, DatePicker, DateRangePicker |
 | Display | Panel, Badge, Avatar, Stat, Presence, Empty, Mock, DescriptionList |
+| Cards | Card with composable header, title, description, body, media, footer, and actions; SelectionCard |
 | Feedback | Alert, ErrorSurface, Skeleton, SkeletonText, Progress |
 | Navigation | Breadcrumb, NavLink, Tabs, Pagination |
 | Disclosure and overlays | Accordion, Dialog, AlertDialog, Popover, Tooltip, DropdownMenu |
@@ -42,6 +44,19 @@ The [table examples](http://localhost:3000/kitchen-sink/tables) compose filterin
 sorting, selection across pages, pagination, and loading/empty/failure states.
 Collection state lives at the call site; the table does not fetch or impose a
 column schema.
+
+The [card examples](http://localhost:3000/kitchen-sink/cards) compose records,
+metrics, settings, selectable choices, and media from the same parts. Card parts
+come from `components/display`; `SelectionCard` comes from `components/patterns`
+and uses the existing radio/checkbox controls. A primary `CardLink` extends over
+the card surface; secondary controls belong in `CardAction` or `CardFooter`.
+Settings, selection, form submission/reset, and retry examples use local state.
+
+The [picker examples](http://localhost:3000/kitchen-sink/pickers) cover searchable
+choices, removable selections, typed date segments, calendars, constraints, and
+native form submission/reset. Each compound picker owns its label, hint, and
+error wiring. Public values are option IDs or Gregorian date strings; date
+objects and the React Aria behavior engine stay inside the wrappers.
 
 The [chart examples](http://localhost:3000/kitchen-sink/charts) use SVG/CSS with no
 additional dependency. They preserve zero, negative line values, and missing
@@ -65,8 +80,8 @@ The [page patterns](http://localhost:3000/kitchen-sink/patterns) show collection
 and detail-page compositions. These are reusable slots and recipes, with
 application decisions supplied by the caller.
 
-This covers the common application foundation. Searchable comboboxes, calendars,
-file-upload workflows, notifications, virtualized grids, and advanced chart
+This covers the common application foundation. File-upload workflows,
+notifications, virtualized grids, and advanced chart
 interactions remain product-driven additions.
 
 ## Structure
