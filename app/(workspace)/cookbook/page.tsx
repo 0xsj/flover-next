@@ -14,6 +14,7 @@ export default function CookbookPage() {
   return <Container width="page"><Flex direction="column" gap={9}>
     <PageHeader title="Cookbook" description="Working examples for your next application. Explore a complete flow, then bring the pieces you need into your own workspace."
       actions={<Button asChild intent="secondary"><Link href="/app">Open your app</Link></Button>} />
+    <Card><CardHeader><CardTitle level={2}><CardLink asChild><Link href="/cookbook/manual">Understand the architecture</Link></CardLink></CardTitle><CardDescription>The user manual explains the layers, Result and Failure model, backend adapters, and the path from a behavior contract to a working feature. Start here before adopting a recipe.</CardDescription></CardHeader></Card>
     <div className={s.grid}>
       {RECIPES.map(({ href, label, description, icon: Icon, category }) => <Card key={href}>
         <CardHeader leading={<Icon size={20} aria-hidden="true" />}>

@@ -1,7 +1,7 @@
 # Resilience checks
 
 `npm run test:resilience` runs the response-boundary and sequence guarantees.
-`npm run test:resilience:mutations` deliberately breaks eight of those guarantees
+`npm run test:resilience:mutations` deliberately breaks seventeen of those guarantees
 and checks whether the tests detect each change.
 
 The mutation command copies source into a temporary workspace, shares the
@@ -16,10 +16,16 @@ mutant. Missing tools, runtime import failures, and absent test reports stop the
 harness instead of producing a score. A surviving or invalid scored mutation
 also makes the command fail; inspect the evidence before changing anything.
 
-The eight changes cover bypassed decoding, partial array validation, obsolete
+The changes cover bypassed decoding, partial array validation, obsolete
 responses, discarded previous data, loss before rather than after a commit,
 overlapping unresolved saves, overwritten drafts, and failed reconciliation
-misreported as absence. This is a curated regression set, not an exhaustive
+misreported as absence, sending without a checkpoint, accepting stale item
+revisions, and forgetting committed receipts. The draft mutations now target
+the shared state machine used by the note, item and session recipes. Six further
+mutations exercise wrong-account recovery, forbidden-as-expiry, old grants during
+refresh, observation accidentally canceling work, cancellation acknowledgment
+inventing completion, and ignoring the chosen time zone. This is a
+curated regression set, not an exhaustive
 mutation engine or a percentage of all possible bugs.
 
 The contracts were written before this implementation:
@@ -27,6 +33,13 @@ The contracts were written before this implementation:
 - `lib/http/response.doc.ts`
 - `lib/chaos/sequence.doc.ts`
 - `app/(workspace)/cookbook/(recipes)/resilience/doc.ts`
+- `lib/runtime/save-draft.doc.ts`
+- `lib/services/example/item-workflow.doc.ts`
+- `app/(workspace)/cookbook/(recipes)/items/doc.ts`
+- `lib/runtime/session-recovery.doc.ts`
+- `lib/services/access/doc.ts`
+- `lib/services/jobs/doc.ts`
+- `lib/locale/doc.ts`
 
 The tests were written with implementation visibility. The full blind spec-test
 procedure is **not claimed**: this session did not have a writer with an enforced

@@ -42,6 +42,7 @@ do not recognise are the ones to open.
 
 | | |
 | --- | --- |
+| [a-draft-checkpoint-must-include-the-attempt](techniques/a-draft-checkpoint-must-include-the-attempt.md) | Persisting an editable draft is insufficient recovery when a write may already have committed. |
 | [next-history-metadata-skips-url-updates](substrate/next-history-metadata-skips-url-updates.md) | Passing Next's own history metadata into its patched history methods can bypass the update that keeps search-parameter hooks in sync. |
 | [a-lost-response-is-not-a-rejected-write](techniques/a-lost-response-is-not-a-rejected-write.md) | A lost response does not establish that a write was rejected. |
 | [a-flex-child-will-not-shrink](language/a-flex-child-will-not-shrink.md) | A flex item's `min-width` computes to `auto`, not `0`, so an item refuses to narrow below its own content and overflows the row it is in. |
@@ -103,3 +104,5 @@ do not recognise are the ones to open.
 | [the-first-paint-happens-before-your-code](techniques/the-first-paint-happens-before-your-code.md) | Anything that has to be true of the first frame cannot be decided by the component that renders it, which forces a second copy of the logic into something that runs earlier — and that copy, not the script, is the real cost. |
 | [three-states-die-at-the-render](techniques/three-states-die-at-the-render.md) | Every tier can keep a distinction intact and one ternary at the last call site destroys it — so the collapse has to be made unwriteable by a component rather than forbidden by a rule. |
 | [traversal-that-activates](techniques/traversal-that-activates.md) | Arrow-key traversal that activates as it moves is the right default and the wrong one the moment activation costs something — four tabs walked past becomes four panels loaded. |
+
+[Authority and observation have separate lifetimes](techniques/authority-and-observation-have-separate-lifetimes.md) — restoring permission to act does not settle an earlier command.

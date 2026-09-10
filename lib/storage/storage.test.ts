@@ -9,7 +9,7 @@ const schema: DocumentSchema<{ count: number }> = {
       ? ok({ count: value.count }) : err(invalid("Expected a count", {}));
   },
 };
-afterEach(() => { vi.restoreAllMocks(); localStorage.clear(); });
+afterEach(() => { vi.restoreAllMocks(); localStorage.clear(); sessionStorage.clear(); });
 
 describe("registered storage documents", () => {
   it("distinguishes missing, zero, and corrupt data without repairing reads", () => {
@@ -74,6 +74,15 @@ describe("registered storage documents", () => {
 });
 
 describe("browser adapter", () => {
+  it("supports tab-local storage without touching local storage or its subscribers", () => {
+    const local = createBrowserStorage(), session = createBrowserStorage("session");
+    const listener = vi.fn(); const subscription = local.subscribe("draft", listener);
+    local.write("draft", "local"); listener.mockClear();
+    expect(session.write("draft", "tab").ok).toBe(true);
+    expect(session.read("draft").unwrapOr(null)).toBe("tab");
+    expect(local.read("draft").unwrapOr(null)).toBe("local"); expect(listener).not.toHaveBeenCalled();
+    if (subscription.ok) subscription.value();
+  });
   it("is lazy and turns a denied accessor into a Failure", () => {
     const get = vi.spyOn(window, "localStorage", "get").mockImplementation(() => { throw new DOMException("denied", "SecurityError"); });
     const port = createBrowserStorage(); expect(get).not.toHaveBeenCalled();

@@ -6,11 +6,12 @@ export const POLICY = {
     diagnostics: ["diagnostics", "kernel"],
     "url-state": ["url-state", "kernel"],
     storage: ["storage", "kernel"],
+    locale: ["locale", "kernel"],
     realtime: ["realtime", "kernel"],
     http: ["http", "diagnostics", "kernel"],
     chaos: ["chaos", "http", "kernel"],
     services: ["services", "http", "kernel"],
-    root: ["root", "services", "http", "chaos", "diagnostics", "kernel"],
+    root: ["root", "services", "http", "chaos", "diagnostics", "storage", "kernel"],
   },
   frameworks: ["react", "react-dom", "next", "svelte", "solid-js", "@tanstack", "radix-ui", "@radix-ui", "react-aria", "react-stately", "react-aria-components"],
   libraryOwners: [

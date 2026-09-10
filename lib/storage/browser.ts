@@ -12,13 +12,16 @@ function failure(error: unknown): Failure {
   return internal("Browser storage could not complete this operation.", { type: "storage_operation" });
 }
 
-export function createBrowserStorage(): StoragePort {
+/** Local persists across browser sessions; session is isolated to a tab and
+ * survives its reloads. Neither area is touched during construction. */
+export function createBrowserStorage(area: "local" | "session" = "local"): StoragePort {
   function access<T>(operation: (storage: Storage) => T): Result<T> {
     try {
-      if (typeof window === "undefined" || !window.localStorage) {
+      if (typeof window === "undefined") {
         return err(unavailable("Browser storage is not available.", { type: "storage_unavailable" }));
       }
-      return ok(operation(window.localStorage));
+      const storage = area === "session" ? window.sessionStorage : window.localStorage;
+      return ok(operation(storage));
     } catch (error) { return err(failure(error)); }
   }
   function change(key: string, operation: (storage: Storage) => void): Result<void> {

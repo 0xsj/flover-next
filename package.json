@@ -9,7 +9,7 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:resilience": "vitest run lib/http/response.test.ts lib/services/responses.test.ts lib/chaos/sequence.test.ts lib/runtime/latest-read.test.ts 'app/(workspace)/cookbook/(recipes)/resilience/note-model.test.ts'",
+    "test:resilience": "vitest run lib/http/response.test.ts lib/services/responses.test.ts lib/chaos/sequence.test.ts lib/runtime/latest-read.test.ts 'app/(workspace)/cookbook/(recipes)/resilience/note-model.test.ts' lib/runtime/save-draft.test.ts lib/services/example/item-workflow.test.ts lib/root/item-workflow.test.ts lib/runtime/session-recovery.test.ts lib/runtime/capabilities.test.ts lib/runtime/job-observer.test.ts lib/locale/locale.test.ts lib/services/continuity.test.ts",
     "test:resilience:mutations": "node tools/resilience/mutate.mjs",
     "check:architecture": "node tools/architecture/cli.mjs",
     "test:architecture": "vitest run tools/architecture/check.test.ts"

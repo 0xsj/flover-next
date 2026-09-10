@@ -20,7 +20,7 @@ export function WorkspaceShell({ children, account }: { children: ReactNode; acc
   const area = workspaceArea(pathname);
   const title = area === "app" ? "Your app" : "Cookbook";
   const groups = area === "app" ? APP_NAV : COOKBOOK_NAV;
-  const page = groups.flatMap(group => group.items).find(item => item.href === pathname)?.label;
+  const page = groups.flatMap(group => group.items).find(item => item.href === pathname || (!item.exact && pathname.startsWith(`${item.href}/`)))?.label;
 
   return <RailShell
     sidebarLabel={`${title} navigation`}

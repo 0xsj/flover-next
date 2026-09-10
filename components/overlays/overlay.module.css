@@ -22,6 +22,8 @@
   }
 
   .head { display: grid; gap: var(--space-3); padding-inline-end: var(--space-8); }
+  /* The anchor is logical, so the horizontal translation must reverse too. */
+  .panel:dir(rtl) { transform: translate(50%, -50%); }
   .title { font-size: var(--text-15); font-weight: var(--weight-bold); color: var(--ink); }
   .description { font-size: var(--text-12-5); line-height: var(--leading-body); color: var(--ink-3); }
   .body { font-size: var(--text-12-5); line-height: var(--leading-body); color: var(--ink-2); }

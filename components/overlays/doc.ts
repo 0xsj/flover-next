@@ -11,6 +11,11 @@
  *     Escape closes it
  *     focus is RESTORED to the trigger on close
  *
+ * A localized caller passes lang and dir to portal content explicitly: it no
+ * longer inherits the preview region's DOM ancestors. The shared panel uses
+ * logical positioning and reverses its horizontal translation in RTL so the
+ * same center anchor works in either direction.
+ *
  * All four are asserted, plus the scroll lock and the page behind going inert.
  *
  * # The accessible name is a required PROP

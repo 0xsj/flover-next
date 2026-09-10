@@ -16,6 +16,11 @@
  * exhaustion become Failure values, with storage-specific details in `type`.
  * Subscribers receive successful changes in this tab and storage events from
  * other tabs, including external clear. Every subscription has cleanup.
+ * The browser adapter defaults to local storage. Its explicit session area uses
+ * the same validation/Result contract but isolates documents to a tab and its
+ * same-origin child contexts. Reload retains session data; closing the tab ends
+ * its normal lifetime. Browser session restoration may restore it too, so this
+ * is a lifetime choice, not a secure-erasure guarantee.
  *
  * LIMITS
  * This is synchronous, best-effort browser persistence, not a database. It has

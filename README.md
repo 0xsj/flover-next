@@ -18,6 +18,12 @@ Open [the cookbook](http://localhost:3000/cookbook) for the working examples;
 canvas using the same rail shell. The [kitchen sink](http://localhost:3000/kitchen-sink)
 remains the component catalog.
 
+Read the [user manual](http://localhost:3000/cookbook/manual) for the architecture,
+Result/Failure model, backend integration and feature-building workflow. It is
+public, with chapter navigation and a Markdown download. The
+[repository reading map](docs/manual/README.md) links the underlying contracts
+and optional protocols.
+
 ## App and cookbook
 
 The rail switches between the app, cookbook, and component catalog. The app and
@@ -32,6 +38,27 @@ uncertain saves against isolated memory fixtures, including production previews.
 Diagnostics records the path through those reads. URL state demonstrates a
 shareable collection with search, filters, sorting, pagination, and view mode.
 Sign-in and sign-up return to the requested local page, preserving its query.
+
+Four further recipes make backend assumptions explicit:
+
+- `/cookbook/session`: account-scoped draft recovery, simulated expiry after a
+  commit, wrong-account and failed verification, and receipt reconciliation.
+- `/cookbook/access`: allowed/denied capabilities with reasons, unavailable
+  policy, revocation notifications, and authoritative forbidden operations.
+- `/cookbook/jobs`: import/export observation, unknown progress, reconnect,
+  cancellation acknowledgment loss, and completion racing cancellation.
+- `/cookbook/localization`: explicit locale/time zone/currency formatting,
+  long German text, Arabic RTL, unavailable values, and a localized dialog.
+
+The portable stores are in `lib/runtime/{session-recovery,capabilities,job-observer}.ts`;
+wire contracts are in `lib/services/{access,jobs}` and formatting in `lib/locale`.
+Cookbook roots select isolated simulators. They do not expire the real app
+session or authorize production operations. A production backend must supply
+authenticated identity, per-operation authorization, account-scoped durable
+receipts, and ordered durable job snapshots. Reauthentication never resends an
+uncertain save; cancel acknowledgment never substitutes for terminal job status.
+Job creation, file delivery, session refresh/rotation, and a full translation
+catalog remain product adapter work. No new dependencies are required.
 
 Routes live under `app/(workspace)/`: `app/` is the product canvas, and
 `cookbook/` owns the examples. The shared navigation metadata is in `_lib/navigation.ts`.
@@ -104,6 +131,40 @@ URLs are shareable: keep secrets and private drafts out of query state.
 
 Both modules have ordinary implementation-visible contract tests. They do not
 claim an implementation-blind test writer or a mutation score.
+
+## Complete item workflow
+
+The [items recipe](http://localhost:3000/cookbook/items?item=api) connects the
+foundations into a browse/detail/edit workflow. Search, host filter, sort, page
+and selected item live in the URL. Item details and collection reads fail
+independently, with empty, missing and stale-data states kept distinct.
+
+The editor supports client/server field errors, dirty input, confirmed discard,
+revision conflicts, and save-outcome reconciliation. Input remains editable
+while saving. A receipt confirms only the captured draft, so later edits remain
+unsaved. Save attempts checkpoint before sending; unresolved attempts restore
+after reload and must be checked before a fresh save is allowed.
+
+`lib/runtime/save-draft.ts` holds the shared framework-free lifecycle used by
+both the note and item recipes. Services own revision and receipt contracts;
+`lib/root/item-workflow.ts` composes the isolated fixture, fault injection,
+diagnostics, and two versioned session-storage documents. Demo records/receipts
+and per-item drafts are separate and account-scoped. The session storage choice
+keeps this demonstration tab-local. It does not simulate cross-tab concurrency
+or claim real-server durability. URLs carry only the view and item identity;
+private drafts never enter links or diagnostics.
+
+Navigation restores checkpointed drafts. Reload/close prompts are best effort;
+if checkpointing fails, the editor warns that recovery is unprotected and retains
+the current input. Unreadable or newer documents block initialization until
+explicit recovery or a confirmed reset. A real backend must provide operation
+deduplication, revision checks, and authoritative receipt lookup before adopting
+the save recovery policy.
+
+The scenario controls cover malformed/unavailable reads, validation refusal,
+stale revisions, lost responses, no delivery, held responses, and failed lookup.
+The ordinary contract tests and eleven curated mutation checks are
+implementation-visible; they make no blind-writer claim.
 
 ## Component catalog
 

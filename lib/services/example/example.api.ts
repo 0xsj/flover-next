@@ -35,7 +35,7 @@ export async function getItem(
   id: string,
   options?: CallOptions,
 ): Promise<Result<Item, ReadFailure>> {
-  return (await client.get<unknown>(`/items/${id}`, { signal: options?.signal, trace: options?.trace })).andThen(value => decodeItem(value, options?.trace)).mapErr(asRead);
+  return (await client.get<unknown>(`/items/${encodeURIComponent(id)}`, { signal: options?.signal, trace: options?.trace })).andThen(value => decodeItem(value, options?.trace)).mapErr(asRead);
 }
 
 /** A read whose emptiness is a legitimate answer, so it says so in its type.
@@ -103,7 +103,7 @@ export async function renameItem(
   const current = await getItem(client, id, options);
   if (!current.ok) return current;
 
-  return (await client.patch<unknown>(`/items/${id}`, {
+  return (await client.patch<unknown>(`/items/${encodeURIComponent(id)}`, {
     body: { name, host: current.value.host },
     signal: options?.signal, trace: options?.trace,
   })).andThen(value => decodeItem(value, options?.trace)).mapErr(asRead);

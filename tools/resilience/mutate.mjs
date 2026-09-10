@@ -22,17 +22,29 @@ for (const part of [".next/types", ".next/dev/types"]) {
 const tests = [
   "lib/http/response.test.ts", "lib/services/responses.test.ts", "lib/chaos/sequence.test.ts",
   "lib/runtime/latest-read.test.ts", "app/(workspace)/cookbook/(recipes)/resilience/note-model.test.ts",
+  "lib/runtime/save-draft.test.ts", "lib/services/example/item-workflow.test.ts", "lib/root/item-workflow.test.ts",
+  "lib/runtime/session-recovery.test.ts", "lib/runtime/capabilities.test.ts", "lib/runtime/job-observer.test.ts", "lib/locale/locale.test.ts", "lib/services/continuity.test.ts",
+  "app/_lib/return-to.test.ts",
 ];
-const note = "app/(workspace)/cookbook/(recipes)/resilience/note-model.ts";
+const note = "lib/runtime/save-draft.ts";
 const mutations = [
   { id: "bypass-decoding", file: "lib/http/response.ts", from: "const decoded = read(value);", to: "const decoded = value as T;" },
   { id: "validate-only-first-item", file: "lib/http/response.ts", from: "for (const raw of value)", to: "for (const raw of value.slice(0, 1))" },
   { id: "accept-obsolete-responses", file: "lib/runtime/latest-read.ts", from: "if (own !== generation || signal.aborted) return;", to: "// Obsolete responses are deliberately accepted." },
   { id: "erase-last-good-data", file: "lib/runtime/latest-read.ts", from: 'settled = { state: "failed", failure: result.error, previous };', to: 'settled = { state: "failed", failure: result.error, previous: undefined };' },
   { id: "lose-response-before-commit", file: "lib/chaos/sequence.ts", from: "const result = await inner.request<T>(method, path, { ...options, signal });", to: 'const result = effect?.kind === "lose-response" ? ok(undefined as T) : await inner.request<T>(method, path, { ...options, signal });' },
-  { id: "allow-unresolved-second-write", file: note, from: '["saving", "checking", "unknown"]', to: '["saving", "checking"]' },
-  { id: "overwrite-newer-draft", file: note, from: 'store.set({ ...store.get(), confirmed: receipt, phase: { state: "ready" } });', to: 'store.set({ ...store.get(), draft: receipt.draft, confirmed: receipt, phase: { state: "ready" } });' },
+  { id: "allow-unresolved-second-write", file: note, from: 'if (["saving", "checking", "unknown"].includes(current.phase.state)) return;', to: 'if (["saving", "checking"].includes(current.phase.state)) return;' },
+  { id: "overwrite-newer-draft", file: note, from: 'transition({ ...store.get(), baseline: structuredClone(receipt.draft), confirmed: receipt, phase: { state: "ready" } });', to: 'transition({ ...store.get(), baseline: structuredClone(receipt.draft), draft: receipt.draft, confirmed: receipt, phase: { state: "ready" } });' },
   { id: "treat-failed-check-as-absence", file: note, from: "if (!result.ok) uncertain(attempt, result.error);", to: 'if (!result.ok) updatePhase({ state: "not-recorded" });' },
+  { id: "send-without-checkpoint", file: note, from: 'if (!checkpoint.ok) { updatePhase({ state: "refused", failure: checkpoint.error, submitted: attempt }); return; }', to: '// Continue even though recovery cannot be checkpointed.' },
+  { id: "accept-stale-item-revision", file: "lib/services/example/item-workflow.fixtures.ts", from: "if (current.revision !== attempt.expectedRevision)", to: "if (false)" },
+  { id: "forget-committed-item-receipt", file: "lib/services/example/item-workflow.fixtures.ts", from: "receipts: [...data.receipts, receipt]", to: "receipts: data.receipts" },
+  { id: "resume-another-account", file: "lib/runtime/session-recovery.ts", from: "if (result.value.accountId !== accountId)", to: "if (false)" },
+  { id: "expire-on-forbidden", file: "lib/runtime/session-recovery.ts", from: 'if (failure.kind === "unauthenticated") expire();', to: 'if (failure.kind === "unauthenticated" || failure.kind === "forbidden") expire();' },
+  { id: "retain-grants-during-refresh", file: "lib/runtime/capabilities.ts", from: 'store.set({ state: "loading" });', to: '// Keep the old grant while refreshing.' },
+  { id: "stop-watching-cancels-job", file: "lib/runtime/job-observer.ts", from: 'readGeneration++; reader?.abort(); update({ watching: false, refreshing: false });', to: 'readGeneration++; reader?.abort(); void port.cancel(id, new AbortController().signal); update({ watching: false, refreshing: false });' },
+  { id: "accepted-cancel-invents-terminal-state", file: "lib/runtime/job-observer.ts", from: 'await refresh();', to: 'await refresh(); if (result.ok && result.value.accepted) update({ job: { ...store.get().job!, state: "canceled" } });' },
+  { id: "ignore-explicit-time-zone", file: "lib/locale/index.ts", from: 'timeZone: context.timeZone, dateStyle:', to: 'timeZone: "UTC", dateStyle:' },
 ];
 const hash = value => createHash("sha256").update(value).digest("hex");
 const subjects = [...new Set([...tests, ...mutations.map(mutation => mutation.file)])];

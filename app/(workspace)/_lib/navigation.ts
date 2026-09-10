@@ -2,6 +2,11 @@ import { BookOpen, History, LayoutGrid, Network, TriangleAlert, Zap } from "@/co
 import type { NavGroup } from "@/components/shells";
 
 export const RECIPES = [
+  { href: "/cookbook/session", label: "Session recovery", icon: History, description: "Resume an account-scoped draft after session expiry and reconcile the original save.", category: "Failure handling" },
+  { href: "/cookbook/access", label: "Capabilities", icon: BookOpen, description: "Explain denied actions and handle permissions changing while a workspace is open.", category: "Failure handling" },
+  { href: "/cookbook/jobs", label: "Long-running jobs", icon: Zap, description: "Follow imports and exports through disconnection, progress, and cancellation races.", category: "Interactive workspaces" },
+  { href: "/cookbook/localization", label: "Localization", icon: BookOpen, description: "Exercise explicit formatting, long translated text, and right-to-left layouts.", category: "Working examples" },
+  { href: "/cookbook/items", label: "Items", icon: LayoutGrid, description: "Browse, edit and recover a save with revision checks, durable drafts and interaction diagnostics.", category: "Working examples" },
   { href: "/cookbook/dashboard", label: "Dashboard", icon: LayoutGrid, description: "Session data, server and cached reads, and an optimistic update.", category: "Working examples" },
   { href: "/cookbook/activity", label: "Activity", icon: History, description: "A working collection with filtering, pagination, and real empty states.", category: "Working examples" },
   { href: "/cookbook/url-state", label: "URL state", icon: BookOpen, description: "Share a collection view with typed search, filters, sorting, pagination, and browser history.", category: "Working examples" },
@@ -16,7 +21,7 @@ export const RECIPES = [
 
 export const APP_NAV: readonly NavGroup[] = [{ items: [{ href: "/app", label: "Home", icon: LayoutGrid, exact: true }] }];
 export const COOKBOOK_NAV: readonly NavGroup[] = [
-  { items: [{ href: "/cookbook", label: "Start here", icon: BookOpen, exact: true }] },
+  { items: [{ href: "/cookbook", label: "Start here", icon: BookOpen, exact: true }, { href: "/cookbook/manual", label: "User manual", icon: BookOpen }] },
   ...["Working examples", "Interactive workspaces", "Failure handling"].map(label => ({ label, items: RECIPES.filter(recipe => recipe.category === label) })),
 ];
 

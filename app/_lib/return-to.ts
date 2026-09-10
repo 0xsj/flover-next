@@ -1,16 +1,14 @@
+import { localReturnTo } from "@/lib/url-state/local-return";
+
 /** Authentication may return only to a local application or cookbook page.
  * Validate both the query parameter and the submitted hidden field: a browser
  * can replace either. Authentication pages and API routes are not destinations. */
 export function safeReturnTo(value: unknown): string {
   const fallback = "/app";
-  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//") || value.includes("\\")) return fallback;
-  if ([...value].some(character => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127)) return fallback;
   try {
-    const target = new URL(value, "https://flover.invalid");
+    const target = new URL(localReturnTo(value), "https://flover.invalid");
     const decoded = decodeURIComponent(target.pathname);
-    if (target.origin !== "https://flover.invalid" || !/^\/(?:app|cookbook)(?:\/|$)/.test(decoded)) return fallback;
-    if (decoded.includes("\\") || decoded.includes("//") || decoded.split("/").some(part => part === "." || part === "..")) return fallback;
-    if ([...decoded].some(character => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127)) return fallback;
+    if (!/^\/(?:app|cookbook)(?:\/|$)/.test(decoded)) return fallback;
     if (target.searchParams.has("_rsc")) target.searchParams.delete("_rsc");
     return `${target.pathname}${target.search}${target.hash}`;
   } catch {

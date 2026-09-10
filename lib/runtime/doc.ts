@@ -70,5 +70,24 @@
  * refused history write as a region-level Result. Push records user decisions;
  * replace repairs the current address without adding a second history entry.
  * Server-fetched query state should reuse the schema with router navigation.
+ *
+ * # A draft and a save attempt have different lifetimes
+ *
+ * save-draft.ts is the framework-free save/reconciliation model used by the
+ * note, item and session recipes. A receipt settles its captured draft, while the editor
+ * may already contain newer input. Optional synchronous checkpointing must
+ * succeed before sending a write; after a reload, a captured unresolved attempt
+ * returns as unknown and is checked rather than automatically sent again.
+ * Domain refusal rules, revision matching and persistence stay caller-owned.
+ *
+ * # Authority and observation are separate state machines
+ *
+ * Session recovery verifies the original account without replaying a command.
+ * Capability refresh withdraws grants until a new snapshot is accepted; unlike
+ * ordinary data reads, an old authorization decision is not a loading fallback.
+ * Job observation survives refresh failures, but stop-watching and cancellation
+ * are separate operations. Backend acknowledgment does not invent completion.
+ * All three stores are framework-free; their contracts sit beside the runtime
+ * or corresponding services. Cookbook roots provide isolated authority fixtures.
  */
 export {};
