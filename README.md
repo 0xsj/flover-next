@@ -13,8 +13,8 @@ npm ci
 npm run dev
 ```
 
-Open [the cookbook](http://localhost:3000/cookbook) for the working examples;
-`/` redirects there. [Your app](http://localhost:3000/app) is a fresh, authenticated
+Open [Flover](http://localhost:3000) for the introduction and links to the kitchen
+sink, cookbook, and user manual. [Your app](http://localhost:3000/app) is a fresh, authenticated
 canvas using the same rail shell. The [kitchen sink](http://localhost:3000/kitchen-sink)
 remains the component catalog.
 
